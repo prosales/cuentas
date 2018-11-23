@@ -1,0 +1,68 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <span style="font-size:2.1em; font-weight:bold;">{{title}}</span>
+            <button  ng-click="bonus()" class="pull-right btn" style="position: absolute;right: 0;top: 8px;right: 20px; border: 1px solid white; background-color: transparent; color: white">Bonus</button>
+            <button  ng-click="raffle()" class="pull-right btn" style="position: absolute;right: 0;top: 8px;right: 100px; border: 1px solid white; background-color: transparent; color: white">Rifas</button>
+            <button  ng-click="auto()" class="pull-right btn" style="position: absolute;right: 0;top: 8px;right: 170px; border: 1px solid white; background-color: transparent; color: white">Auto</button>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid bg" >
+    <div class="row" >
+        <div class="col-sm-2 col-md-2 sidebar">
+            <h2>TOP</h2>
+            <ul class="nav nav-sidebar">
+                <div class="media" ng-repeat="usuario in usuarios">
+                    <div class="media-left" >
+                        <a href="#">
+                            <!--<img  class="media-object" ng-src="{{'/avatars/miniaturas/'+ usuario.avatar}}" data-holder-rendered="true" style="width: 60px; height: 60px;">-->
+                            <img  class="media-object" ng-src="/avatars/avatar.png" data-holder-rendered="true" style="width: 60px; height: 60px;">
+                        </a>
+                    </div>
+                    <div class="media-body" style="padding: 10px;"> <h4 class="media-heading">{{usuario.client.full_name}}</h4>{{usuario.total}} fotos  </div>
+                </div>
+
+            </ul>
+        </div>
+
+        <div  class="col-sm-10 col-sm-offset-2 col-md-10 col-md-offset-2 main">
+            <div masonry="{transitionDuration: '2s',resize:true ,percentPosition: true, hiddenStyle: {opacity: .001, transform: 'scale(0.01)', transform: 'scale(0.01)'}, visibleStyle: {opacity: 1, transform: 'rotate(0deg)'}}"  preserve-order >
+                 <div class="masonry-brick " ng-repeat="imagen in imagenes">
+                     <img ng-src="/{{imagen.photo}}" />
+                      <div class="card-block ">
+                          <img alt="64x64" class="avatar-image" ng-src="/avatars/avatar.png" data-holder-rendered="true">
+                          <h4 class="avatar-name" style="font-size: 12px !important;">{{imagen.client.full_name}}</h4>
+                      </div>
+                  </div>
+            </div>
+        </div>
+        <!--<div id="myModal" class="modal fade" role="dialog">-->
+        <div id="myModal" class="modal" role="dialog">
+            <div class="modal-dialog ">
+                
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">GANADOR</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="text-align: center">
+                        <img class="img-responsive img-circle" style="margin: 0 auto;" ng-src="/avatars/avatar.png" alt="">
+                        <h1>{{ganador.full_name}}</h1>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+</script>
