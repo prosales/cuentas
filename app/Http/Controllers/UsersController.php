@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use Validator;
 use App\User;
+use App\GasStation;
 
 class UsersController extends Controller
 {
@@ -35,7 +36,9 @@ class UsersController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        $stations = GasStation::pluck('name', 'id');
+        $stations[0] = "Seleccione";
+        return view('users.create', compact('stations'));
     }
 
     /**
@@ -52,7 +55,13 @@ class UsersController extends Controller
             'password' => 'required|min:6'
         ]);
 
-        $request->merge(['password' => bcrypt($request->input('password')), 'business_id' => 0]);
+        $request->merge(['password' => bcrypt($request->input('password'))]);
+        if($request->es_admin == 1) {
+            $request->merge(['es_admin' => 1, 'gas_station_id' => 0]);
+        }
+        else {
+            $request->merge(['es_admin' => 0, 'gas_station_id' => $request->gas_station_id]);
+        }
         $registro = User::create($request->all());
 
         return redirect()->route('users.index')->with('success', 'Registro creado correctamente');
@@ -79,7 +88,9 @@ class UsersController extends Controller
     public function edit($id)
     {
         $registro = User::find($id);
-        return view('users.edit', compact('registro'));
+        $stations = GasStation::pluck('name', 'id');
+        $stations[0] = "Seleccione";
+        return view('users.edit', compact('registro', 'stations'));
     }
 
     /**
@@ -128,7 +139,17 @@ class UsersController extends Controller
 
     public function data()
     {
-        $tabla = Datatables::of( User::all() )
+        $tabla = Datatables::of( User::with('gas_station')->get() )
+                ->addColumn('type', function($registro){
+                    $type = $registro->es_admin == 1 ? 'Administrador' : 'Ingresos';
+
+                    return $type;
+                })
+                ->addColumn('gas_station', function($registro){
+                    $gas_station = $registro->gas_station != null ? $registro->gas_station->name : '-';
+
+                    return $gas_station;
+                })
                 ->addColumn('action', function($registro){
                     $edit = '<a href="'.route('users.edit',$registro->id).'" class="btn btn-primary btn-sm" data-title="Editar">Editar</a> ';
                     $show = '<a href="'.route('users.show',$registro->id).'" class="btn btn-danger btn-sm" data-title="Eliminar">Eliminar</a>';

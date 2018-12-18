@@ -33,10 +33,11 @@
                             <thead>
                                 <tr>
                                     <th>Chofer</th>
-                                    <th>Número de Placa</th>
+                                    <th>DPI</th>
                                     <th>No. Recibo</th>
                                     <th>Monto</th>
                                     <th>Fecha</th>
+                                    <th>Url Foto</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -85,10 +86,11 @@
         ],
         columns: [
             {data: 'driver.name', name: 'name', orderable: false, searchable: false},
-            {data: 'driver.plate_number', name: 'plate_number', orderable: false, searchable: false},
+            {data: 'driver.dpi', name: 'dpi', orderable: false, searchable: false},
             {data: 'number', name: 'number'},
             {data: 'amount', name: 'amount'},
-            {data: 'date', name: 'date'}
+            {data: 'date', name: 'date'},
+            {data: 'photo', name: 'photo'}
         ],
         order: [[0, 'asc']]
     });

@@ -5,12 +5,12 @@
     <div class="row mt-5">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Usuarios</div>
+                <div class="card-header">Empresas</div>
 
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <a href="{{ route('users.create') }}" class="btn btn-primary btn-sm">Crear Registro</a>
+                            <a href="{{ route('business.create') }}" class="btn btn-primary btn-sm">Crear Registro</a>
                         </div>
                     </div>
                     <div class="row mt-5">
@@ -19,10 +19,9 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Nombre</th>
-                                    <th>Email</th>
-                                    <th>Tipo</th>
-                                    <th>Gasolinera</th>
+                                    <th>Nombre del cliente</th>
+                                    <th>Nombre de la empresa</th>
+                                    <th>Saldo actual</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -53,20 +52,19 @@
 @endif
 @push('scripts')
 <script>
-    updateMenu('users');
+    updateMenu('business');
     var table = $('#table-records').DataTable({
         language: {
             url: "lang/datatables-spanish.json"
         },
         processing: true,
         serverSide: true,
-        ajax: '{!! route('users.data') !!}',
+        ajax: '{!! route('business.data') !!}',
         columns: [
             {data: 'id', name: 'id'},
-            {data: 'name', name: 'name'},
-            {data: 'email', name: 'email'},
-            {data: 'type', name: 'type', orderable: false, searchable: false},
-            {data: 'gas_station', name: 'gas_station', orderable: false, searchable: false},
+            {data: 'owner_name', name: 'owner_name'},
+            {data: 'business_name', name: 'business_name'},
+            {data: 'balance', name: 'balance'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
         ],
         order: [[0, 'asc']]

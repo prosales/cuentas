@@ -7,8 +7,10 @@ use Yajra\Datatables\Datatables;
 use Validator;
 use App\Receipt;
 use App\Driver;
+use App\Business;
 use Auth;
 use DB;
+use Carbon\Carbon;
 
 class ReceiptsController extends Controller
 {
@@ -28,7 +30,14 @@ class ReceiptsController extends Controller
      */
     public function index()
     {
-        $drivers = Driver::select(DB::raw("CONCAT(name,' - ',plate_number) AS name"),'id')->pluck('name','id');
+        if(\Auth::user()->es_admin == 1)
+            $drivers = Driver::select(DB::raw("CONCAT(name,' - ',dpi) AS name"),'id')->pluck('name','id');
+        else {
+            $drivers = Driver::select(DB::raw("CONCAT(name,' - ',dpi) AS name"),'id')
+            ->leftJoin('business', 'business.id', '=', 'drivers.business_id')
+            ->whereRaw('business.gas_station_id = ?', [\Auth::user()->gas_station_id])
+            ->pluck('name','id');
+        }
         $drivers[0] = "Seleccione";
         return view('receipts.index', compact('drivers'));
     }
@@ -56,16 +65,27 @@ class ReceiptsController extends Controller
             $this->validate($request, [
                 'driver_id' => 'required',
                 'number' => 'required|unique:receipts,number',
-                'amount' => 'required',
-                'date' => 'required'
+                'amount' => 'required'
             ]);
             
             $request->merge(['user_id' => Auth::user()->id]);
+            $request->merge(['date' => Carbon::now()->toDateString()]);
+            $request->merge(['payment' => $request->amount]);
+            if($request->file('foto')) {
+                $imagen = $request->file('foto');
+                $nombre_imagen = time().'_'.str_random(10).'.'.$imagen->getClientOriginalExtension();
+                Storage::disk('photos')->put($nombre_imagen,File::get($imagen), 'public');
+                $request->merge(['photo' => 'photos/'.$nombre_imagen]);
+            }
+            else {
+                $request->merge(['photo' => '']);
+            }
             $registro = Receipt::create($request->all());
 
             $driver = Driver::find($request->driver_id);
-            $driver->balance += $request->amount;
-            $driver->save();
+            $business = Business::find($driver->business_id);
+            $business->balance += $request->amount;
+            $business->save();
             
             DB::commit();
             return redirect()->route('receipts.index')->with('success', 'Registro creado correctamente');
@@ -129,6 +149,11 @@ class ReceiptsController extends Controller
     public function data()
     {
         $tabla = Datatables::of( Receipt::with('driver')->orderBy('date','DESC')->get() )
+                ->addColumn('photo', function($registro){
+                    $photo = '<a href="'.$registro->photo.'" >'.url($registro->photo).'</a>';
+                    return $photo;
+                })
+                ->rawColumns(['photo'])
                 ->addIndexColumn()
                 ->make(true);
 

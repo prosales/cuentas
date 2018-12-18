@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password'
+        'name', 'email', 'password', 'es_admin', 'gas_station_id'
     ];
 
     /**
@@ -26,4 +26,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function gas_station() {
+        return $this->hasOne('App\GasStation', 'id', 'gas_station_id');
+    }
 }

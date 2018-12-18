@@ -9,6 +9,7 @@ use App\Deposit;
 use App\Driver;
 use Auth;
 use DB;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
@@ -30,7 +31,14 @@ class DepositsController extends Controller
      */
     public function index()
     {
-        $drivers = Driver::select(DB::raw("CONCAT(name,' - ',plate_number) AS name"),'id')->pluck('name','id');
+        if(\Auth::user()->es_admin == 1)
+            $drivers = Driver::select(DB::raw("CONCAT(name,' - ',dpi) AS name"),'id')->pluck('name','id');
+        else {
+            $drivers = Driver::select(DB::raw("CONCAT(name,' - ',dpi) AS name"),'id')
+            ->leftJoin('business', 'business.id', '=', 'drivers.business_id')
+            ->whereRaw('business.gas_station_id = ?', [\Auth::user()->gas_station_id])
+            ->pluck('name','id');
+        }
         $drivers[0] = "Seleccione";
         return view('deposits.index', compact('drivers'));
     }
@@ -59,10 +67,10 @@ class DepositsController extends Controller
                 'driver_id' => 'required',
                 'number' => 'required|unique:receipts,number',
                 'amount' => 'required',
-                'date' => 'required'
             ]);
             
             $request->merge(['user_id' => Auth::user()->id]);
+            $request->merge(['date' => Carbon::now()->toDateString()]);
             if($request->file('foto')) {
                 $imagen = $request->file('foto');
                 $nombre_imagen = time().'_'.str_random(10).'.'.$imagen->getClientOriginalExtension();
@@ -75,8 +83,9 @@ class DepositsController extends Controller
             $registro = Deposit::create($request->all());
 
             $driver = Driver::find($request->driver_id);
-            $driver->balance -= $request->amount;
-            $driver->save();
+            $business = Business::find($driver->business_id);
+            $business->balance -= $request->amount;
+            $business->save();
             
             DB::commit();
             return redirect()->route('deposits.index')->with('success', 'Registro creado correctamente');

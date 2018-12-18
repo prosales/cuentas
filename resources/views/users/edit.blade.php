@@ -40,7 +40,32 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                
+                                <div class="form-group{{ $errors->has('es_admin') ? ' has-danger' : '' }}">
+                                    <label for="exampleSelect1">Tipo</label>
+                                    <select class="form-control" name="es_admin">
+                                    @if($registro->es_admin == 1)
+                                        <option value="1" selected>Administrador</option>
+                                        <option value="0">Ingresos</option>
+                                    @else
+                                        <option value="1">Administrador</option>
+                                        <option value="0" selected>Ingresos</option>
+                                    @endif
+                                    </select>
+                                    @if ($errors->has('es_admin'))
+                                    <div class="invalid-feedback">{{ $errors->first('es_admin') }}</div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group{{ $errors->has('gas_station_id') ? ' has-danger' : '' }}">
+                                    <label for="exampleSelect1">Gasolinera</label>
+                                    {{ Form::select('gas_station_id', $stations, $registro->gas_station_id, ['class'=>'form-control', 'id'=>'gas_station_id']) }}
+                                    @if ($errors->has('gas_station_id'))
+                                    <div class="invalid-feedback">{{ $errors->first('gas_station_id') }}</div>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                         <div class="row mt-5">

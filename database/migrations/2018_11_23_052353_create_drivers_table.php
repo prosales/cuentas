@@ -16,9 +16,11 @@ class CreateDriversTable extends Migration
         Schema::create('drivers', function (Blueprint $table) {
             $table->increments('id');
             $table->text('name');
-            $table->string('plate_number')->unique();
-            $table->float('balance', 8, 2);
+            $table->string('dpi');
+            $table->unsignedInteger('business_id');
             $table->timestamps();
+
+            $table->foreign('business_id')->references('id')->on('business');
         });
     }
 

@@ -20,11 +20,20 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group{{ $errors->has('plate_number') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" >Número de Placa</label>
-                                    <input type="text" class="form-control{{ $errors->has('plate_number') ? ' is-invalid' : '' }}" name="plate_number" value="{{ $registro->plate_number }}" required>
-                                    @if ($errors->has('plate_number'))
-                                    <div class="invalid-feedback">{{ $errors->first('plate_number') }}</div>
+                                <div class="form-group{{ $errors->has('dpi') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" >DPI</label>
+                                    <input type="text" class="form-control{{ $errors->has('dpi') ? ' is-invalid' : '' }}" name="dpi" value="{{ $registro->dpi }}" required>
+                                    @if ($errors->has('dpi'))
+                                    <div class="invalid-feedback">{{ $errors->first('dpi') }}</div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group{{ $errors->has('business_id') ? ' has-danger' : '' }}">
+                                    <label for="exampleSelect1">Empresa</label>
+                                    {{ Form::select('business_id', $business, $registro->business_id, ['class'=>'form-control', 'id'=>'business_id']) }}
+                                    @if ($errors->has('business_id'))
+                                    <div class="invalid-feedback">{{ $errors->first('business_id') }}</div>
                                     @endif
                                 </div>
                             </div>

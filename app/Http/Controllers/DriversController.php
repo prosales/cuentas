@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use Validator;
+use DB;
 use App\Driver;
+use App\Business;
 
 class DriversController extends Controller
 {
@@ -35,7 +37,13 @@ class DriversController extends Controller
      */
     public function create()
     {
-        return view('drivers.create');
+        if(\Auth::user()->es_admin == 1)
+            $business = Business::select(DB::raw('business_name as name'), 'id')->pluck('name','id');
+        else
+            $business = Business::select(DB::raw('business_name as name'), 'id')->where('gas_station_id', \Auth::user()->gas_station_id)->pluck('name','id');
+
+        $business[0] = 'Seleccione';
+        return view('drivers.create', compact('business'));
     }
 
     /**
@@ -48,10 +56,10 @@ class DriversController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:255',
-            'plate_number' => 'required|unique:drivers,plate_number'
+            'dpi' => 'required',
+            'business_id' => 'required'
         ]);
 
-        $request->merge(['balance' => 0]);
         $registro = Driver::create($request->all());
 
         return redirect()->route('drivers.index')->with('success', 'Registro creado correctamente');
@@ -78,7 +86,12 @@ class DriversController extends Controller
     public function edit($id)
     {
         $registro = Driver::find($id);
-        return view('drivers.edit', compact('registro'));
+        if(\Auth::user()->es_admin == 1)
+            $business = Business::select(DB::raw('business_name as name'), 'id')->pluck('name','id');
+        else
+            $business = Business::select(DB::raw('business_name as name'), 'id')->where('gas_station_id', \Auth::user()->gas_station_id)->pluck('name','id');
+        $business[0] = 'Seleccione';
+        return view('drivers.edit', compact('registro', 'business'));
     }
 
     /**
@@ -93,7 +106,8 @@ class DriversController extends Controller
         $request->merge(['id' => $id]);
         $this->validate($request, [
             'name' => 'required|max:255',
-            'plate_number' => 'unique:drivers,plate_number,'.$request->id,
+            'dpi' => 'required',
+            'business_id' => 'required'
         ]);
         
         $registro = Driver::find($id);
@@ -120,7 +134,21 @@ class DriversController extends Controller
 
     public function data()
     {
-        $tabla = Datatables::of( Driver::all() )
+        if(\Auth::user()->es_admin == 1)
+            $records = Driver::with('business')->get();
+        else {
+            $records = Driver::select(DB::raw('drivers.*'))
+            ->leftJoin('business', 'business.id', '=', 'drivers.business_id')
+            ->whereRaw('business.gas_station_id = ?', [\Auth::user()->gas_station_id])
+            ->with('business')
+            ->get();
+        }
+
+        $tabla = Datatables::of( $records )
+                ->addColumn('business', function($registro){
+                    $business = $registro->business!=null ? $registro->business->business_name : '';
+                    return $business;
+                })
                 ->addColumn('action', function($registro){
                     $edit = '<a href="'.route('drivers.edit',$registro->id).'" class="btn btn-primary btn-sm" data-title="Editar">Editar</a> ';
                     $show = '<a href="'.route('drivers.show',$registro->id).'" class="btn btn-danger btn-sm" data-title="Eliminar">Eliminar</a>';

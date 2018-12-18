@@ -19,7 +19,10 @@ class CreateReceiptsTable extends Migration
             $table->unsignedInteger('user_id');
             $table->string('number')->unique();
             $table->float('amount', 8, 2);
+            $table->text('photo');
             $table->date('date');
+            $table->float('payment', 8, 2);
+            $table->tinyInteger('to_cancel')->default(0);
             $table->timestamps();
 
             $table->foreign('driver_id')->references('id')->on('drivers');

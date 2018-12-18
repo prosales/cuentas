@@ -4,18 +4,15 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Driver extends Model
+class GasStation extends Model
 {
+    protected $table = 'gas_stations';
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'dpi', 'business_id'
+        'name'
     ];
-
-    public function business() {
-        return $this->hasOne('App\Business', 'id', 'business_id');
-    }
 }

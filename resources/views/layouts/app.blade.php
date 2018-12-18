@@ -70,6 +70,7 @@
             <nav class="col-md-2 d-none d-md-block bg-light sidebar">
                 <div class="sidebar-sticky">
                     <ul id="menu" class="nav nav-pills flex-column" style="margin-top: 25px;">
+                    @if(Auth::user()->es_admin == 1)
                     <li class="nav-item" id="dashboard">
                         <a class="nav-link" href="{{ url('/home') }}">
                         DASHBOARD
@@ -80,6 +81,12 @@
                         USUARIOS
                         </a>
                     </li>
+                    <li class="nav-item" id="business">
+                        <a class="nav-link" href="{{ route('business.index') }}">
+                        EMPRESAS
+                        </a>
+                    </li>
+                    @endif
                     <li class="nav-item" id="drivers">
                         <a class="nav-link" href="{{ route('drivers.index') }}">
                         CHOFERES

@@ -95,7 +95,11 @@
         @if (Route::has('login'))
             <div class="top-right links">
                 @auth
-                    <a href="{{ url('/home') }}">Home</a>
+                    @if(Auth::user()->es_admin == 1)
+                        <a href="{{ url('/home') }}">Home</a>
+                    @else
+                        <a href="{{ url('/drivers') }}">Home</a>
+                    @endif
                     @else
                     <a href="{{ route('login') }}">Iniciar Sesión</a>
                     <!-- <a href="{{ route('register') }}">Register</a> -->

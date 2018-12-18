@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBalancesTable extends Migration
+class CreateGasStationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateBalancesTable extends Migration
      */
     public function up()
     {
-        Schema::create('balances', function (Blueprint $table) {
+        Schema::create('gas_stations', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('driver_id');
-            $table->float('balance', 8, 2);
-            $table->integer('month');
-            $table->integer('year');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ class CreateBalancesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('balances');
+        Schema::dropIfExists('gas_stations');
     }
 }

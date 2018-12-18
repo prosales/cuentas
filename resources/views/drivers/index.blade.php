@@ -20,8 +20,8 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Nombre</th>
-                                    <th>Número de Placa</th>
-                                    <th>Saldo Pendiente</th>
+                                    <th>DPI</th>
+                                    <th>Empresa</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -63,8 +63,8 @@
         columns: [
             {data: 'id', name: 'id'},
             {data: 'name', name: 'name'},
-            {data: 'plate_number', name: 'plate_number'},
-            {data: 'balance', name: 'balance'},
+            {data: 'dpi', name: 'dpi'},
+            {data: 'business', name: 'businesss', orderable: false, searchable: false},
             {data: 'action', name: 'action', orderable: false, searchable: false}
         ],
         order: [[0, 'asc']]

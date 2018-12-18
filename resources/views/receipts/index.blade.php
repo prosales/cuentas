@@ -38,6 +38,12 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="excel">Foto Recibo</label>
+                                    <input type="file" class="form-control-file"  name="foto" aria-describedby="excel">
+                                </div>
+                            </div>
+                            <!-- <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('date') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" >Fecha</label>
                                     <input type="date" class="form-control{{ $errors->has('date') ? ' is-invalid' : '' }}" name="date" required>
@@ -45,7 +51,7 @@
                                     <div class="invalid-feedback">{{ $errors->first('date') }}</div>
                                     @endif
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="row mt-5">

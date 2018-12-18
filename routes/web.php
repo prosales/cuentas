@@ -27,6 +27,12 @@ Route::get('users.data', [
     'uses' => 'UsersController@data',
     'as' => 'users.data',
 ]);
+//BUSINESS
+Route::resource('business', 'BusinessController');
+Route::get('business.data', [
+    'uses' => 'BusinessController@data',
+    'as' => 'business.data',
+]);
 //DRIVERS
 Route::resource('drivers', 'DriversController');
 Route::get('drivers.data', [
