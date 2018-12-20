@@ -33,7 +33,6 @@
                             <thead>
                                 <tr>
                                     <th>Chofer</th>
-                                    <th>DPI</th>
                                     <th>No. Recibo</th>
                                     <th>Monto</th>
                                     <th>Fecha</th>
@@ -86,7 +85,6 @@
         ],
         columns: [
             {data: 'driver.name', name: 'name', orderable: false, searchable: false},
-            {data: 'driver.dpi', name: 'dpi', orderable: false, searchable: false},
             {data: 'number', name: 'number'},
             {data: 'amount', name: 'amount'},
             {data: 'date', name: 'date'},
