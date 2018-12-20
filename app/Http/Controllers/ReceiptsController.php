@@ -161,11 +161,22 @@ class ReceiptsController extends Controller
     public function data()
     {
         $tabla = Datatables::of( Receipt::with('driver')->orderBy('date','DESC')->get() )
+                ->addColumn('status', function($registro){
+                    $status = '<span class="badge badge-primary">Pendiente</span>';
+                    if($registro->to_cancel == 1) {
+                        $status = '<span class="badge badge-success">Cancelado</span>';
+                    }
+                    else if($registro->payment != $registro->amount) {
+                        $status = '<span class="badge badge-warning">Abonado</span>';
+                    }
+
+                    return $status;
+                })
                 ->addColumn('photo', function($registro){
                     $photo = '<a href="'.$registro->photo.'" >'.url($registro->photo).'</a>';
                     return $photo;
                 })
-                ->rawColumns(['photo'])
+                ->rawColumns(['status','photo'])
                 ->addIndexColumn()
                 ->make(true);
 

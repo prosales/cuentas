@@ -36,6 +36,8 @@
                                     <th>Chofer</th>
                                     <th>No. Recibo</th>
                                     <th>Monto</th>
+                                    <th>Saldo Pendiente</th>
+                                    <th>Estado</th>
                                     <th>Fecha</th>
                                     <th>Url Foto</th>
                                 </tr>
@@ -89,6 +91,8 @@
             {data: 'driver.name', name: 'name', orderable: false, searchable: false},
             {data: 'number', name: 'number'},
             {data: 'amount', name: 'amount'},
+            {data: 'payment', name: 'payment'},
+            {data: 'status', name: 'status'},
             {data: 'date', name: 'date'},
             {data: 'photo', name: 'photo'}
         ],
