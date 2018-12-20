@@ -16,6 +16,6 @@ class Receipt extends Model
     ];
 
     public function driver() {
-        return $this->hasOne('App\Driver', 'id', 'driver_id');
+        return $this->hasOne('App\Driver', 'id', 'driver_id')->with('business');
     }
 }

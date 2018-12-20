@@ -32,6 +32,7 @@
                             <table class="table table-hover" id="table-records">
                             <thead>
                                 <tr>
+                                    <th>Empresa</th>
                                     <th>Chofer</th>
                                     <th>No. Recibo</th>
                                     <th>Monto</th>
@@ -84,6 +85,7 @@
             }
         ],
         columns: [
+            {data: 'driver.business.business_name', name: 'name', orderable: false, searchable: false},
             {data: 'driver.name', name: 'name', orderable: false, searchable: false},
             {data: 'number', name: 'number'},
             {data: 'amount', name: 'amount'},
