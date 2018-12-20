@@ -20,15 +20,6 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group{{ $errors->has('dpi') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" >DPI</label>
-                                    <input type="text" class="form-control{{ $errors->has('dpi') ? ' is-invalid' : '' }}" name="dpi" required>
-                                    @if ($errors->has('dpi'))
-                                    <div class="invalid-feedback">{{ $errors->first('dpi') }}</div>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('business_id') ? ' has-danger' : '' }}">
                                     <label for="exampleSelect1">Empresa</label>
                                     {{ Form::select('business_id', $business, 0, ['class'=>'form-control', 'id'=>'business_id']) }}

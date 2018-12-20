@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Driver extends Model
+class Payment extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,10 +12,6 @@ class Driver extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'business_id'
+        'receipt_id', 'deposit_id', 'payment'
     ];
-
-    public function business() {
-        return $this->hasOne('App\Business', 'id', 'business_id');
-    }
 }

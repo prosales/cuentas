@@ -46,6 +46,7 @@ Route::get('reports.receipts', [
     'as' => 'reports.receipts',
 ]);
 Route::get('report/receipts', 'ReceiptsController@report')->name('receipts.report');
+Route::get('receipts/{business_id}/pending', 'DepositsController@receipts');
 //DEPOSITS
 Route::resource('deposits', 'DepositsController');
 Route::get('reports.deposits', [

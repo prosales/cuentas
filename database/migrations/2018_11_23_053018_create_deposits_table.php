@@ -15,7 +15,7 @@ class CreateDepositsTable extends Migration
     {
         Schema::create('deposits', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('driver_id');
+            $table->unsignedInteger('business_id');
             $table->unsignedInteger('user_id');
             $table->string('number')->unique();
             $table->float('amount', 8, 2);
@@ -23,7 +23,7 @@ class CreateDepositsTable extends Migration
             $table->date('date');
             $table->timestamps();
 
-            $table->foreign('driver_id')->references('id')->on('drivers');
+            $table->foreign('business_id')->references('id')->on('business');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

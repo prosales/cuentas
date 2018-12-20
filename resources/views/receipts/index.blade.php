@@ -13,7 +13,7 @@
                             <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('driver_id') ? ' has-danger' : '' }}">
                                     <label for="exampleSelect1">Chofer</label>
-                                    {{ Form::select('driver_id', $drivers, 0, ['class'=>'form-control', 'id'=>'driver_id']) }}
+                                    {{ Form::select('driver_id', $drivers, 0, ['class'=>'form-control', 'id'=>'driver_id', 'required'=>true]) }}
                                     @if ($errors->has('driver_id'))
                                     <div class="invalid-feedback">{{ $errors->first('driver_id') }}</div>
                                     @endif
@@ -25,6 +25,15 @@
                                     <input type="text" class="form-control{{ $errors->has('number') ? ' is-invalid' : '' }}" name="number" required>
                                     @if ($errors->has('number'))
                                     <div class="invalid-feedback">{{ $errors->first('number') }}</div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group{{ $errors->has('plate_number') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" >Número de Placa</label>
+                                    <input type="text" class="form-control{{ $errors->has('plate_number') ? ' is-invalid' : '' }}" name="plate_number" required>
+                                    @if ($errors->has('plate_number'))
+                                    <div class="invalid-feedback">{{ $errors->first('plate_number') }}</div>
                                     @endif
                                 </div>
                             </div>
@@ -41,6 +50,24 @@
                                 <div class="form-group">
                                     <label for="excel">Foto Recibo</label>
                                     <input type="file" class="form-control-file"  name="foto" aria-describedby="excel">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group{{ $errors->has('type') ? ' has-danger' : '' }}">
+                                    <label for="exampleSelect1">Por concepto de:</label>
+                                    {{ Form::select('type', $options, 0, ['class'=>'form-control', 'id'=>'type', 'required'=>true]) }}
+                                    @if ($errors->has('type'))
+                                    <div class="invalid-feedback">{{ $errors->first('type') }}</div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group{{ $errors->has('observations') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" >Observaciones</label>
+                                    <textarea  class="form-control{{ $errors->has('observations') ? ' is-invalid' : '' }}" name="observations"></textarea>
+                                    @if ($errors->has('observations'))
+                                    <div class="invalid-feedback">{{ $errors->first('observations') }}</div>
+                                    @endif
                                 </div>
                             </div>
                             <!-- <div class="col-md-6">

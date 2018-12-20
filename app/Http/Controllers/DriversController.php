@@ -56,7 +56,6 @@ class DriversController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:255',
-            'dpi' => 'required',
             'business_id' => 'required'
         ]);
 
@@ -106,7 +105,6 @@ class DriversController extends Controller
         $request->merge(['id' => $id]);
         $this->validate($request, [
             'name' => 'required|max:255',
-            'dpi' => 'required',
             'business_id' => 'required'
         ]);
         

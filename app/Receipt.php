@@ -12,7 +12,7 @@ class Receipt extends Model
      * @var array
      */
     protected $fillable = [
-        'driver_id', 'user_id', 'number', 'amount', 'photo', 'date', 'payment', 'to_cancel'
+        'driver_id', 'user_id', 'number', 'amount', 'photo', 'date', 'plate_number', 'type', 'observations', 'payment', 'to_cancel'
     ];
 
     public function driver() {

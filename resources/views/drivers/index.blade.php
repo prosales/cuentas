@@ -20,7 +20,6 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Nombre</th>
-                                    <th>DPI</th>
                                     <th>Empresa</th>
                                     <th>Acciones</th>
                                 </tr>
@@ -63,7 +62,6 @@
         columns: [
             {data: 'id', name: 'id'},
             {data: 'name', name: 'name'},
-            {data: 'dpi', name: 'dpi'},
             {data: 'business', name: 'businesss', orderable: false, searchable: false},
             {data: 'action', name: 'action', orderable: false, searchable: false}
         ],

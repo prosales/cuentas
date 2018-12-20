@@ -21,6 +21,9 @@ class CreateReceiptsTable extends Migration
             $table->float('amount', 8, 2);
             $table->text('photo');
             $table->date('date');
+            $table->string('plate_number');
+            $table->string('type');
+            $table->text('observations');
             $table->float('payment', 8, 2);
             $table->tinyInteger('to_cancel')->default(0);
             $table->timestamps();

@@ -12,10 +12,10 @@ class Deposit extends Model
      * @var array
      */
     protected $fillable = [
-        'driver_id', 'user_id', 'number', 'amount', 'photo', 'date'
+        'business_id', 'user_id', 'number', 'amount', 'photo', 'date'
     ];
 
-    public function driver() {
-        return $this->hasOne('App\Driver', 'id', 'driver_id');
+    public function business() {
+        return $this->hasOne('App\Business', 'id', 'business_id');
     }
 }

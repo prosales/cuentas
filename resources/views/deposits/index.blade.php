@@ -11,11 +11,11 @@
                     {{ Form::open(['method' => 'POST','route' => 'deposits.store', 'files'=>true]) }}
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group{{ $errors->has('driver_id') ? ' has-danger' : '' }}">
-                                    <label for="exampleSelect1">Chofer</label>
-                                    {{ Form::select('driver_id', $drivers, 0, ['class'=>'form-control', 'id'=>'driver_id']) }}
-                                    @if ($errors->has('driver_id'))
-                                    <div class="invalid-feedback">{{ $errors->first('driver_id') }}</div>
+                                <div class="form-group{{ $errors->has('business_id') ? ' has-danger' : '' }}">
+                                    <label for="exampleSelect1">Empresa</label>
+                                    {{ Form::select('business_id', $business, 0, ['class'=>'form-control', 'id'=>'business_id']) }}
+                                    @if ($errors->has('business_id'))
+                                    <div class="invalid-feedback">{{ $errors->first('business_id') }}</div>
                                     @endif
                                 </div>
                             </div>
@@ -37,7 +37,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <!-- <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('date') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" >Fecha</label>
                                     <input type="date" class="form-control{{ $errors->has('date') ? ' is-invalid' : '' }}" name="date" required>
@@ -45,7 +45,7 @@
                                     <div class="invalid-feedback">{{ $errors->first('date') }}</div>
                                     @endif
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="excel">Foto Boleta</label>
@@ -53,6 +53,34 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row mt-5">
+                            <div class="col-md-12">
+                                <table class="table table-hover" id="table-records">
+                                <thead>
+                                    <tr>
+                                        <th>Chofer</th>
+                                        <th>Número de placa</th>
+                                        <th>Número de Recibo</th>
+                                        <th>Fecha</th>
+                                        <th>Monto</th>
+                                        <th>Pendiente</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                                </table> 
+                            </div>
+                        </div>
+
+                        <hr/>
+                        <div class="row mt-5">
+                            <div class="col-md-12">
+                                <label style="font-size: 20px; font-weight: bold;">Total: </label> <span id="total" style="font-size: 20px; margin-left: 25px;">Q 0</span>
+                            </div>
+                        </div>
+                        <hr/>
 
                         <div class="row mt-5">
                             <div class="col-md-12">
@@ -82,6 +110,43 @@
 @push('scripts')
 <script>
     updateMenu('deposits');
+
+    $('#business_id').on('change', update_receipts);
+
+    function update_receipts(e) {
+
+        if(e!=null)
+            e.preventDefault();
+
+        var id = $(this).val();
+        var total = 0;
+        $.ajax({
+            type: 'GET',
+            url: '{{url('receipts')}}' + '/' + id + '/pending',
+            dataType: 'JSON',
+            success: function(data) {
+                table = $('#table-records > tbody');
+                $.each(data, function(key, value) {
+                    table.append(
+                        '<tr>' +
+                            '<td>'+value.driver.name+'</td>' +
+                            '<td>'+value.plate_number+'</td>' +
+                            '<td>'+value.number+'</td>' +
+                            '<td>'+value.date+'</td>' +
+                            '<td>'+value.amount+'</td>' +
+                            '<td>'+value.payment+'</td>' +
+                        '<tr/>'
+                    );
+
+                    total += value.payment;
+                    $('#total').text('Q '+total);
+                });
+            },
+            error: function() {
+
+            }
+        });
+    }
     // var table = $('#table-records').DataTable({
     //     language: {
     //         url: "lang/datatables-spanish.json"

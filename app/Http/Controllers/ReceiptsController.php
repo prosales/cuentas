@@ -31,15 +31,23 @@ class ReceiptsController extends Controller
     public function index()
     {
         if(\Auth::user()->es_admin == 1)
-            $drivers = Driver::select(DB::raw("CONCAT(name,' - ',dpi) AS name"),'id')->pluck('name','id');
+            $drivers = Driver::select('name','id')->pluck('name','id');
         else {
-            $drivers = Driver::select(DB::raw("CONCAT(name,' - ',dpi) AS name"),'id')
+            $drivers = Driver::select('name','id')
             ->leftJoin('business', 'business.id', '=', 'drivers.business_id')
             ->whereRaw('business.gas_station_id = ?', [\Auth::user()->gas_station_id])
             ->pluck('name','id');
         }
-        $drivers[0] = "Seleccione";
-        return view('receipts.index', compact('drivers'));
+        $drivers[0] = 'Seleccione';
+        $options = [
+            '' => 'Seleccione',
+            'Regular' => 'Regular',
+            'Super' => 'Super',
+            'V-Power' => 'V-Power',
+            'Diesel' => 'Diesel',
+            'Otros' => 'Otros'
+        ];
+        return view('receipts.index', compact('drivers', 'options'));
     }
 
     /**
@@ -65,7 +73,8 @@ class ReceiptsController extends Controller
             $this->validate($request, [
                 'driver_id' => 'required',
                 'number' => 'required|unique:receipts,number',
-                'amount' => 'required'
+                'amount' => 'required',
+                'type' => 'required'
             ]);
             
             $request->merge(['user_id' => Auth::user()->id]);

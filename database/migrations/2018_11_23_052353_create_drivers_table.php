@@ -16,7 +16,6 @@ class CreateDriversTable extends Migration
         Schema::create('drivers', function (Blueprint $table) {
             $table->increments('id');
             $table->text('name');
-            $table->string('dpi');
             $table->unsignedInteger('business_id');
             $table->timestamps();
 

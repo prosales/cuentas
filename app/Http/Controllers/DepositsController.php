@@ -6,7 +6,10 @@ use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use Validator;
 use App\Deposit;
+use App\Receipt;
 use App\Driver;
+use App\Business;
+use App\Payment;
 use Auth;
 use DB;
 use Carbon\Carbon;
@@ -32,15 +35,12 @@ class DepositsController extends Controller
     public function index()
     {
         if(\Auth::user()->es_admin == 1)
-            $drivers = Driver::select(DB::raw("CONCAT(name,' - ',dpi) AS name"),'id')->pluck('name','id');
-        else {
-            $drivers = Driver::select(DB::raw("CONCAT(name,' - ',dpi) AS name"),'id')
-            ->leftJoin('business', 'business.id', '=', 'drivers.business_id')
-            ->whereRaw('business.gas_station_id = ?', [\Auth::user()->gas_station_id])
-            ->pluck('name','id');
-        }
-        $drivers[0] = "Seleccione";
-        return view('deposits.index', compact('drivers'));
+            $business = Business::select(DB::raw('business_name as name'), 'id')->pluck('name','id');
+        else
+            $business = Business::select(DB::raw('business_name as name'), 'id')->where('gas_station_id', \Auth::user()->gas_station_id)->pluck('name','id');
+
+        $business[0] = 'Seleccione';
+        return view('deposits.index', compact('business'));
     }
 
     /**
@@ -64,7 +64,7 @@ class DepositsController extends Controller
         DB::beginTransaction();
         try {
             $this->validate($request, [
-                'driver_id' => 'required',
+                'business_id' => 'required',
                 'number' => 'required|unique:receipts,number',
                 'amount' => 'required',
             ]);
@@ -82,16 +82,55 @@ class DepositsController extends Controller
             }
             $registro = Deposit::create($request->all());
 
-            $driver = Driver::find($request->driver_id);
-            $business = Business::find($driver->business_id);
+            $business = Business::find($request->business_id);
             $business->balance -= $request->amount;
             $business->save();
+
+            $receipts = Receipt::select('receipts.*')
+                    ->leftJoin('drivers', 'drivers.id', '=', 'receipts.driver_id')
+                    ->leftJoin('business', 'business.id', '=', 'drivers.business_id')
+                    ->where('receipts.to_cancel', 0)
+                    ->where('business.id', $request->business_id)
+                    ->get();
+            
+            $amount = floatval($request->amount);
+            foreach($receipts as $item) {
+                if($amount == 0) {
+                    break;
+                }
+                else {
+                    if($item->payment <= $amount) {
+                        $amount -= $item->payment;
+                        $item->payment = 0;
+                        $item->to_cancel = 1;
+                        $item->save();
+
+                        Payment::create([
+                            'receipt_id' => $item->id,
+                            'deposit_id' => $registro->id,
+                            'payment' => $item->amount
+                        ]);
+                    }
+                    else {
+                        $payment = $item->payment - $amount;
+                        $item->payment = $payment;
+                        $item->save();
+
+                        Payment::create([
+                            'receipt_id' => $item->id,
+                            'deposit_id' => $registro->id,
+                            'payment' => $amount
+                        ]);
+                    }
+                }
+            }
             
             DB::commit();
             return redirect()->route('deposits.index')->with('success', 'Registro creado correctamente');
         }
         catch(\Exception $e) {
             DB::rollBack();
+            dd($e->getMessage());
             return redirect()->route('deposits.index')->with('error', 'Ocurrio un problema al crear el depósito');
         }
     }
@@ -148,7 +187,7 @@ class DepositsController extends Controller
 
     public function data()
     {
-        $tabla = Datatables::of( Deposit::with('driver')->orderBy('date','DESC')->get() )
+        $tabla = Datatables::of( Deposit::with('business')->orderBy('date','DESC')->get() )
                 ->addColumn('photo', function($registro){
                     $photo = '<a href="'.$registro->photo.'" >'.url($registro->photo).'</a>';
                     return $photo;
@@ -158,5 +197,18 @@ class DepositsController extends Controller
                 ->make(true);
 
         return $tabla;
+    }
+
+    public function receipts($business_id)
+    {
+        $records = Receipt::select('receipts.*')
+                    ->leftJoin('drivers', 'drivers.id', '=', 'receipts.driver_id')
+                    ->leftJoin('business', 'business.id', '=', 'drivers.business_id')
+                    ->where('receipts.to_cancel', 0)
+                    ->where('business.id', $business_id)
+                    ->with('driver')
+                    ->get();
+        
+        return $records;
     }
 }
