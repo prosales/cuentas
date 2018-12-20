@@ -8,7 +8,7 @@
                 <div class="card-header">Crear Recibo / Vale</div>
 
                 <div class="card-body">
-                    {{ Form::open(['method' => 'POST','route' => 'receipts.store']) }}
+                    {{ Form::open(['method' => 'POST','route' => 'receipts.store', 'files'=>true]) }}
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('driver_id') ? ' has-danger' : '' }}">
@@ -48,8 +48,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="excel">Foto Recibo</label>
-                                    <input type="file" class="form-control-file"  name="foto" aria-describedby="excel">
+                                    <label for="foto">Foto Recibo</label>
+                                    <input type="file" class="form-control-file"  name="foto">
                                 </div>
                             </div>
                             <div class="col-md-6">

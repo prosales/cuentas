@@ -11,6 +11,8 @@ use App\Business;
 use Auth;
 use DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class ReceiptsController extends Controller
 {
@@ -74,21 +76,22 @@ class ReceiptsController extends Controller
                 'driver_id' => 'required',
                 'number' => 'required|unique:receipts,number',
                 'amount' => 'required',
-                'type' => 'required'
+                'type' => 'required',
+                'foto' => 'required'
             ]);
             
             $request->merge(['user_id' => Auth::user()->id]);
             $request->merge(['date' => Carbon::now()->toDateString()]);
             $request->merge(['payment' => $request->amount]);
-            if($request->file('foto')) {
-                $imagen = $request->file('foto');
-                $nombre_imagen = time().'_'.str_random(10).'.'.$imagen->getClientOriginalExtension();
-                Storage::disk('photos')->put($nombre_imagen,File::get($imagen), 'public');
-                $request->merge(['photo' => 'photos/'.$nombre_imagen]);
+            if($request->observations!='') {
+                $request->merge(['observations' => '']);
             }
-            else {
-                $request->merge(['photo' => '']);
-            }
+
+            $imagen = $request->file('foto');
+            $nombre_imagen = time().'_'.str_random(10).'.'.$imagen->getClientOriginalExtension();
+            Storage::disk('photos')->put($nombre_imagen,File::get($imagen), 'public');
+            $request->merge(['photo' => 'photos/'.$nombre_imagen]);
+
             $registro = Receipt::create($request->all());
 
             $driver = Driver::find($request->driver_id);
