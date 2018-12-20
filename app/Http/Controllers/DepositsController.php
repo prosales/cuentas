@@ -68,69 +68,74 @@ class DepositsController extends Controller
                 'number' => 'required|unique:receipts,number',
                 'amount' => 'required',
             ]);
-            
-            $request->merge(['user_id' => Auth::user()->id]);
-            $request->merge(['date' => Carbon::now()->toDateString()]);
-            if($request->file('foto')) {
-                $imagen = $request->file('foto');
-                $nombre_imagen = time().'_'.str_random(10).'.'.$imagen->getClientOriginalExtension();
-                Storage::disk('photos')->put($nombre_imagen,File::get($imagen), 'public');
-                $request->merge(['photo' => 'photos/'.$nombre_imagen]);
-            }
-            else {
-                $request->merge(['photo' => '']);
-            }
-            $registro = Deposit::create($request->all());
 
             $business = Business::find($request->business_id);
-            $business->balance -= $request->amount;
-            $business->save();
-
-            $receipts = Receipt::select('receipts.*')
-                    ->leftJoin('drivers', 'drivers.id', '=', 'receipts.driver_id')
-                    ->leftJoin('business', 'business.id', '=', 'drivers.business_id')
-                    ->where('receipts.to_cancel', 0)
-                    ->where('business.id', $request->business_id)
-                    ->get();
-            
-            $amount = floatval($request->amount);
-            foreach($receipts as $item) {
-                if($amount == 0) {
-                    break;
+            if($business->balance > 0) {
+                $request->merge(['user_id' => Auth::user()->id]);
+                $request->merge(['date' => Carbon::now()->toDateString()]);
+                if($request->file('foto')) {
+                    $imagen = $request->file('foto');
+                    $nombre_imagen = time().'_'.str_random(10).'.'.$imagen->getClientOriginalExtension();
+                    Storage::disk('photos')->put($nombre_imagen,File::get($imagen), 'public');
+                    $request->merge(['photo' => 'photos/'.$nombre_imagen]);
                 }
                 else {
-                    if($item->payment <= $amount) {
-                        $amount -= $item->payment;
-                        $item->payment = 0;
-                        $item->to_cancel = 1;
-                        $item->save();
+                    $request->merge(['photo' => '']);
+                }
+                $registro = Deposit::create($request->all());
 
-                        Payment::create([
-                            'receipt_id' => $item->id,
-                            'deposit_id' => $registro->id,
-                            'payment' => $item->amount
-                        ]);
+                $business->balance -= $request->amount;
+                $business->save();
+
+                $receipts = Receipt::select('receipts.*')
+                        ->leftJoin('drivers', 'drivers.id', '=', 'receipts.driver_id')
+                        ->leftJoin('business', 'business.id', '=', 'drivers.business_id')
+                        ->where('receipts.to_cancel', 0)
+                        ->where('business.id', $request->business_id)
+                        ->get();
+                
+                $amount = floatval($request->amount);
+                foreach($receipts as $item) {
+                    if($amount == 0) {
+                        break;
                     }
                     else {
-                        $payment = $item->payment - $amount;
-                        $item->payment = $payment;
-                        $item->save();
+                        if($item->payment <= $amount) {
+                            $amount -= $item->payment;
+                            $item->payment = 0;
+                            $item->to_cancel = 1;
+                            $item->save();
 
-                        Payment::create([
-                            'receipt_id' => $item->id,
-                            'deposit_id' => $registro->id,
-                            'payment' => $amount
-                        ]);
+                            Payment::create([
+                                'receipt_id' => $item->id,
+                                'deposit_id' => $registro->id,
+                                'payment' => $item->amount
+                            ]);
+                        }
+                        else {
+                            $payment = $item->payment - $amount;
+                            $item->payment = $payment;
+                            $item->save();
+
+                            Payment::create([
+                                'receipt_id' => $item->id,
+                                'deposit_id' => $registro->id,
+                                'payment' => $amount
+                            ]);
+                        }
                     }
                 }
+
+                DB::commit();
+                return redirect()->route('deposits.index')->with('success', 'Registro creado correctamente');
             }
-            
-            DB::commit();
-            return redirect()->route('deposits.index')->with('success', 'Registro creado correctamente');
+            else {
+                DB::rollBack();
+                return redirect()->route('deposits.index')->with('error', 'El usuario no posee saldo pendiente.');
+            }
         }
         catch(\Exception $e) {
             DB::rollBack();
-            dd($e->getMessage());
             return redirect()->route('deposits.index')->with('error', 'Ocurrio un problema al crear el depósito');
         }
     }
