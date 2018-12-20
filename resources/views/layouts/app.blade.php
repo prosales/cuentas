@@ -71,11 +71,11 @@
                 <div class="sidebar-sticky">
                     <ul id="menu" class="nav nav-pills flex-column" style="margin-top: 25px;">
                     @if(Auth::user()->es_admin == 1)
-                    <li class="nav-item" id="dashboard">
+                    <!-- <li class="nav-item" id="dashboard">
                         <a class="nav-link" href="{{ url('/home') }}">
                         DASHBOARD
                         </a>
-                    </li>
+                    </li> -->
                     <li class="nav-item" id="users">
                         <a class="nav-link" href="{{ route('users.index') }}">
                         USUARIOS

@@ -24,7 +24,7 @@ class HomeController extends Controller
     public function index()
     {
         if(\Auth::user()->es_admin == 1)
-            return view('home');
+            return view('users.index');
         else
             return view('drivers.index');
     }
