@@ -67,21 +67,19 @@ class DepositsController extends Controller
                 'business_id' => 'required',
                 'number' => 'required|unique:receipts,number',
                 'amount' => 'required',
+                'foto' => 'required'
             ]);
 
             $business = Business::find($request->business_id);
             if($business->balance > 0) {
                 $request->merge(['user_id' => Auth::user()->id]);
                 $request->merge(['date' => Carbon::now()->toDateString()]);
-                if($request->file('foto')) {
-                    $imagen = $request->file('foto');
-                    $nombre_imagen = time().'_'.str_random(10).'.'.$imagen->getClientOriginalExtension();
-                    Storage::disk('photos')->put($nombre_imagen,File::get($imagen), 'public');
-                    $request->merge(['photo' => 'photos/'.$nombre_imagen]);
-                }
-                else {
-                    $request->merge(['photo' => '']);
-                }
+                
+                $imagen = $request->file('foto');
+                $nombre_imagen = time().'_'.str_random(10).'.'.$imagen->getClientOriginalExtension();
+                Storage::disk('photos')->put($nombre_imagen,File::get($imagen), 'public');
+                $request->merge(['photo' => 'photos/'.$nombre_imagen]);
+
                 $registro = Deposit::create($request->all());
 
                 $business->balance -= $request->amount;
