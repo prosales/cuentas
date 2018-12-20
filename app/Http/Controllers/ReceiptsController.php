@@ -173,7 +173,10 @@ class ReceiptsController extends Controller
                     return $status;
                 })
                 ->addColumn('photo', function($registro){
-                    $photo = '<a href="'.$registro->photo.'" >'.url($registro->photo).'</a>';
+                    $photo = '';
+                    if($registro->photo!='')
+                        $photo = '<a href="'.url($registro->photo).'" target="_blank">Foto</a>';
+
                     return $photo;
                 })
                 ->rawColumns(['status','photo'])

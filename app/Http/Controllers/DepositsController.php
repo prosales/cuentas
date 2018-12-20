@@ -192,7 +192,10 @@ class DepositsController extends Controller
     {
         $tabla = Datatables::of( Deposit::with('business')->orderBy('date','DESC')->get() )
                 ->addColumn('photo', function($registro){
-                    $photo = '<a href="'.$registro->photo.'" >'.url($registro->photo).'</a>';
+                    $photo = '';
+                    if($registro->photo!='')
+                        $photo = '<a href="'.url($registro->photo).'" target="_blank">Foto</a>';
+
                     return $photo;
                 })
                 ->rawColumns(['photo'])
