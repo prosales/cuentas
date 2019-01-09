@@ -91,7 +91,7 @@
     updateMenu('report_deposit');
     var table = $('#table-records').DataTable({
         language: {
-            url: "/lang/datatables-spanish.json"
+            url: '{!! url("lang/datatables-spanish.json") !!}'
         },
         processing: true,
         serverSide: true,

@@ -84,7 +84,7 @@
     updateMenu('report_galonaje');
     var table = $('#table-records').DataTable({
         language: {
-            url: "/lang/datatables-spanish.json"
+            url: '{!! url("lang/datatables-spanish.json") !!}'
         },
         processing: true,
         serverSide: true,
