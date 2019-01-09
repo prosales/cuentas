@@ -21,47 +21,20 @@
     <div class="row mt-5">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Reporte de Recibos</div>
+                <div class="card-header">Reporte de Galonajes</div>
 
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label class="form-control-label" >Fecha Inicio</label>
-                                <input type="date" class="form-control" id="start">
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label class="form-control-label" >Fecha Fin</label>
-                                <input type="date" class="form-control" id="end">
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="form-control-label" >Empresa</label>
-                                {{ Form::select('business_id', $business, 0, ['class'=>'form-control', 'id'=>'business_id']) }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2">
-                            <button class="btn btn-info" id="filtrar" >Filtrar</button>
-                        </div>
+                        
                     </div>
                     <div class="row mt-5">
                         <div class="col-md-12">
                             <table class="table table-hover" id="table-records">
                             <thead>
                                 <tr>
-                                    <th>Empresa</th>
-                                    <th>Chofer</th>
-                                    <th>No. Recibo</th>
-                                    <th>Monto</th>
-                                    <th>Saldo Pendiente</th>
-                                    <th>Estado</th>
+                                    <th>Gasolina</th>
                                     <th>Fecha</th>
-                                    <th>Url Foto</th>
+                                    <th>Galonaje</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -91,22 +64,14 @@
 @endif
 @push('scripts')
 <script>
-    updateMenu('report_receipt');
+    updateMenu('report_galonaje');
     var table = $('#table-records').DataTable({
         language: {
             url: "/lang/datatables-spanish.json"
         },
         processing: true,
         serverSide: true,
-        ajax: {
-            url: '{!! route('reports.receipts') !!}',
-            data: function(params) {
-                params.start = $('#start').val();
-                params.end = $('#end').val();
-                params.business_id = $('#business_id').val();
-                console.log(params);
-            }
-        },
+        ajax: '{!! route('reports.galonajes') !!}',
         dom: 'Blfrtip',
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
         buttons: [
@@ -127,11 +92,6 @@
             {data: 'photo', name: 'photo'}
         ],
         order: [[0, 'asc']]
-    });
-
-    $('#filtrar').on('click', function(e){
-        table.draw();
-        e.preventDefault();
     });
 </script>
 @endpush

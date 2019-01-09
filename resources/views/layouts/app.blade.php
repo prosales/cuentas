@@ -114,6 +114,11 @@
                         REPORTE DEPOSITOS
                         </a>
                     </li>
+                    <li class="nav-item" id="report_galonaje">
+                        <a class="nav-link" href="{{ route('galonajes.report') }}">
+                        REPORTE GALONAJES
+                        </a>
+                    </li>
                     </ul>
                 </div>
             </nav>

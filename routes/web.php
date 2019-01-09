@@ -54,3 +54,9 @@ Route::get('reports.deposits', [
     'as' => 'reports.deposits',
 ]);
 Route::get('report/deposits', 'DepositsController@report')->name('deposits.report');
+//GALONAJES
+Route::get('reports.galonajes', [
+    'uses' => 'ReceiptsController@data_galonajes',
+    'as' => 'reports.galonajes',
+]);
+Route::get('report/galonajes', 'ReceiptsController@report_galonaje')->name('galonajes.report');

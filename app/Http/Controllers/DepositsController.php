@@ -90,6 +90,7 @@ class DepositsController extends Controller
                         ->leftJoin('business', 'business.id', '=', 'drivers.business_id')
                         ->where('receipts.to_cancel', 0)
                         ->where('business.id', $request->business_id)
+                        ->orderBy('receipts.date', 'desc')
                         ->get();
                 
                 $amount = floatval($request->amount);
@@ -212,6 +213,7 @@ class DepositsController extends Controller
                     ->leftJoin('business', 'business.id', '=', 'drivers.business_id')
                     ->where('receipts.to_cancel', 0)
                     ->where('business.id', $business_id)
+                    ->orderBy('receipts.date', 'desc')
                     ->with('driver')
                     ->get();
         

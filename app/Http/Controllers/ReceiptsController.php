@@ -32,12 +32,12 @@ class ReceiptsController extends Controller
      */
     public function index()
     {
-        if(\Auth::user()->es_admin == 1)
+        if(Auth::user()->es_admin == 1)
             $drivers = Driver::select('name','id')->pluck('name','id');
         else {
-            $drivers = Driver::select('name','id')
+            $drivers = Driver::select(DB::raw('drivers.name, drivers.id'))
             ->leftJoin('business', 'business.id', '=', 'drivers.business_id')
-            ->whereRaw('business.gas_station_id = ?', [\Auth::user()->gas_station_id])
+            ->whereRaw('business.gas_station_id = ?', [Auth::user()->gas_station_id])
             ->pluck('name','id');
         }
         $drivers[0] = 'Seleccione';
@@ -77,7 +77,8 @@ class ReceiptsController extends Controller
                 'number' => 'required|unique:receipts,number',
                 'amount' => 'required',
                 'type' => 'required',
-                'foto' => 'required'
+                'foto' => 'required',
+                'galonaje' => 'required'
             ]);
             
             $request->merge(['user_id' => Auth::user()->id]);
@@ -155,12 +156,30 @@ class ReceiptsController extends Controller
 
     public function report()
     {
-        return view('reports.receipts');
+        if(\Auth::user()->es_admin == 1)
+            $business = Business::select(DB::raw('business_name as name'), 'id')->pluck('name','id');
+        else
+            $business = Business::select(DB::raw('business_name as name'), 'id')->where('gas_station_id', \Auth::user()->gas_station_id)->pluck('name','id');
+
+        $business[0] = 'Todas';
+
+        return view('reports.receipts', compact('business'));
     }
 
-    public function data()
+    public function data(Request $request)
     {
-        $tabla = Datatables::of( Receipt::with('driver')->orderBy('date','DESC')->get() )
+        $where = $request->start && $request->end ? "receipts.date BETWEEN '".date('Y-m-d', strtotime($request->start))."' AND '".date('Y-m-d', strtotime($request->end))."'" : 'TRUE';
+        $where = $request->business_id > 0 ? $where." AND business.id = ".$request->business_id : $where;
+        
+        $records = Receipt::select('receipts.*')
+                    ->leftJoin('drivers', 'drivers.id', '=', 'receipts.driver_id')
+                    ->leftJoin('business', 'business.id', '=', 'drivers.business_id')
+                    ->whereRaw($where)
+                    ->with('driver')
+                    ->orderBy('date','DESC')
+                    ->get();
+
+        $tabla = Datatables::of( $records )
                 ->addColumn('status', function($registro){
                     $status = '<span class="badge badge-primary">Pendiente</span>';
                     if($registro->to_cancel == 1) {
@@ -180,6 +199,40 @@ class ReceiptsController extends Controller
                     return $photo;
                 })
                 ->rawColumns(['status','photo'])
+                ->addIndexColumn()
+                ->make(true);
+
+        return $tabla;
+    }
+
+    public function report_galonaje()
+    {
+        return view('reports.galonajes');
+    }
+
+    public function data_galonajes(Request $request)
+    {
+        $months = [
+            1 => 'Enero',
+            2 => 'Febrero',
+            3 => 'Marzo',
+            4 => 'Abril',
+            5 => 'Mayo',
+            6 => 'Junio',
+            7 => 'Julio',
+            8 => 'Agosto',
+            9 => 'Septiembre',
+            10 => 'Octubre',
+            11 => 'Noviembre',
+            12 => 'Diciembre'
+        ];
+        
+        $records = Receipt::select('receipts.type', DB::raw('sum(galonaje) as total'))->whereRaw('MONTH(date) = ? AND YEAR(date) = ?', [$request->month, $request->year])->groupBy('type')->get();
+
+        $tabla = Datatables::of( $records )
+                ->addColumn('month', function($registro){
+                    return $months[$request->month];
+                })
                 ->addIndexColumn()
                 ->make(true);
 

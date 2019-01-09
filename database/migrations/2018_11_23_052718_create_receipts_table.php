@@ -24,6 +24,7 @@ class CreateReceiptsTable extends Migration
             $table->string('plate_number');
             $table->string('type');
             $table->text('observations')->nullable();
+            $table->float('galonaje', 8, 2);
             $table->float('payment', 8, 2);
             $table->tinyInteger('to_cancel')->default(0);
             $table->timestamps();

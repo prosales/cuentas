@@ -62,6 +62,15 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
+                                <div class="form-group{{ $errors->has('galonaje') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" >Galonaje</label>
+                                    <input type="number" min="0" class="form-control{{ $errors->has('galonaje') ? ' is-invalid' : '' }}" name="galonaje" required>
+                                    @if ($errors->has('galonaje'))
+                                    <div class="invalid-feedback">{{ $errors->first('galonaje') }}</div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('observations') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" >Observaciones</label>
                                     <textarea  class="form-control{{ $errors->has('observations') ? ' is-invalid' : '' }}" name="observations"></textarea>
