@@ -207,7 +207,29 @@ class ReceiptsController extends Controller
 
     public function report_galonaje()
     {
-        return view('reports.galonajes');
+        $months = [
+            1 => 'Enero',
+            2 => 'Febrero',
+            3 => 'Marzo',
+            4 => 'Abril',
+            5 => 'Mayo',
+            6 => 'Junio',
+            7 => 'Julio',
+            8 => 'Agosto',
+            9 => 'Septiembre',
+            10 => 'Octubre',
+            11 => 'Noviembre',
+            12 => 'Diciembre'
+        ];
+
+        $years = [
+            '2019' => '2019',
+            '2020' => '2020',
+            '2021' => '2021',
+            '2022' => '2022'
+        ];
+
+        return view('reports.galonajes', compact('months', 'years'));
     }
 
     public function data_galonajes(Request $request)
@@ -230,8 +252,11 @@ class ReceiptsController extends Controller
         $records = Receipt::select('receipts.type', DB::raw('sum(galonaje) as total'))->whereRaw('MONTH(date) = ? AND YEAR(date) = ?', [$request->month, $request->year])->groupBy('type')->get();
 
         $tabla = Datatables::of( $records )
-                ->addColumn('month', function($registro){
+                ->addColumn('month', function($registro) use($months, $request){
                     return $months[$request->month];
+                })
+                ->addColumn('year', function($registro) use($request){
+                    return $request->year;
                 })
                 ->addIndexColumn()
                 ->make(true);

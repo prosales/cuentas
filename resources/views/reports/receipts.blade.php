@@ -28,13 +28,13 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label class="form-control-label" >Fecha Inicio</label>
-                                <input type="date" class="form-control" id="start">
+                                <input type="date" class="form-control" id="start_date">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label class="form-control-label" >Fecha Fin</label>
-                                <input type="date" class="form-control" id="end">
+                                <input type="date" class="form-control" id="end_date">
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -101,10 +101,9 @@
         ajax: {
             url: '{!! route('reports.receipts') !!}',
             data: function(params) {
-                params.start_date = $('#start').val();
-                params.end_date = $('#end').val();
+                params.start_date = $('#start_date').val();
+                params.end_date = $('#end_date').val();
                 params.business_id = $('#business_id').val();
-                console.log(params);
             }
         },
         dom: 'Blfrtip',

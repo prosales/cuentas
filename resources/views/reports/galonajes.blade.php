@@ -25,7 +25,23 @@
 
                 <div class="card-body">
                     <div class="row">
-                        
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="form-control-label" >Mes</label>
+                                {{ Form::select('month', $months, 0, ['class'=>'form-control', 'id'=>'month']) }}
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="form-control-label" >Año</label>
+                                {{ Form::select('year', $years, 0, ['class'=>'form-control', 'id'=>'year']) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <button class="btn btn-info" id="filtrar" >Filtrar</button>
+                        </div>
                     </div>
                     <div class="row mt-5">
                         <div class="col-md-12">
@@ -33,8 +49,9 @@
                             <thead>
                                 <tr>
                                     <th>Gasolina</th>
-                                    <th>Fecha</th>
                                     <th>Galonaje</th>
+                                    <th>Mes</th>
+                                    <th>Año</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -71,27 +88,34 @@
         },
         processing: true,
         serverSide: true,
-        ajax: '{!! route('reports.galonajes') !!}',
+        ajax: {
+            url: '{!! route('reports.galonajes') !!}',
+            data: function(params) {
+                params.month = $('#month').val();
+                params.year = $('#year').val();
+            }
+        },
         dom: 'Blfrtip',
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
         buttons: [
             {
                 extend: 'excel',
                 text: 'Exportar Excel',
-                title: 'Reporte recibos'
+                title: 'Reporte galonajes'
             }
         ],
         columns: [
-            {data: 'driver.business.business_name', name: 'name', orderable: false, searchable: false},
-            {data: 'driver.name', name: 'name', orderable: false, searchable: false},
-            {data: 'number', name: 'number'},
-            {data: 'amount', name: 'amount'},
-            {data: 'payment', name: 'payment'},
-            {data: 'status', name: 'status'},
-            {data: 'date', name: 'date'},
-            {data: 'photo', name: 'photo'}
+            {data: 'type', name: 'type', orderable: false, searchable: false},
+            {data: 'total', name: 'total', orderable: false, searchable: false},
+            {data: 'month', name: 'month', orderable: false, searchable: false},
+            {data: 'year', name: 'year', orderable: false, searchable: false}
         ],
         order: [[0, 'asc']]
+    });
+
+    $('#filtrar').on('click', function(e){
+        table.draw();
+        e.preventDefault();
     });
 </script>
 @endpush

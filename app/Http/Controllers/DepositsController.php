@@ -186,12 +186,24 @@ class DepositsController extends Controller
 
     public function report()
     {
-        return view('reports.deposits');
+        if(\Auth::user()->es_admin == 1)
+            $business = Business::select(DB::raw('business_name as name'), 'id')->pluck('name','id');
+        else
+            $business = Business::select(DB::raw('business_name as name'), 'id')->where('gas_station_id', \Auth::user()->gas_station_id)->pluck('name','id');
+
+        $business[0] = 'Todas';
+
+        return view('reports.deposits', compact('business'));
     }
 
-    public function data()
+    public function data(Request $request)
     {
-        $tabla = Datatables::of( Deposit::with('business')->orderBy('date','DESC')->get() )
+        $where = $request->start_date && $request->end_date ? "date BETWEEN '".$request->start_date."' AND '".$request->end_date."'" : 'TRUE';
+        $where = $request->business_id > 0 ? $where." AND business_id = ".$request->business_id : $where;
+
+        $records = Deposit::whereRaw($where)->with('business')->orderBy('date','DESC')->get();
+
+        $tabla = Datatables::of( $records )
                 ->addColumn('photo', function($registro){
                     $photo = '';
                     if($registro->photo!='')

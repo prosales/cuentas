@@ -24,8 +24,30 @@
                 <div class="card-header">Reporte Depósitos</div>
 
                 <div class="card-body">
+                <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="form-control-label" >Fecha Inicio</label>
+                                <input type="date" class="form-control" id="start_date">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="form-control-label" >Fecha Fin</label>
+                                <input type="date" class="form-control" id="end_date">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-control-label" >Empresa</label>
+                                {{ Form::select('business_id', $business, 0, ['class'=>'form-control', 'id'=>'business_id']) }}
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
-                        
+                        <div class="col-md-2">
+                            <button class="btn btn-info" id="filtrar" >Filtrar</button>
+                        </div>
                     </div>
                     <div class="row mt-5">
                         <div class="col-md-12">
@@ -73,7 +95,14 @@
         },
         processing: true,
         serverSide: true,
-        ajax: '{!! route('reports.deposits') !!}',
+        ajax: {
+            url: '{!! route('reports.deposits') !!}',
+            data: function(params) {
+                params.start_date = $('#start_date').val();
+                params.end_date = $('#end_date').val();
+                params.business_id = $('#business_id').val();
+            }
+        },
         dom: 'Blfrtip',
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
         buttons: [
@@ -91,6 +120,11 @@
             {data: 'photo', name: 'photo'}
         ],
         order: [[0, 'asc']]
+    });
+
+    $('#filtrar').on('click', function(e){
+        table.draw();
+        e.preventDefault();
     });
 </script>
 @endpush
