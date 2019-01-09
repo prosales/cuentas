@@ -168,7 +168,7 @@ class ReceiptsController extends Controller
 
     public function data(Request $request)
     {
-        $where = $request->start && $request->end ? "receipts.date BETWEEN '".date('Y-m-d', strtotime($request->start))."' AND '".date('Y-m-d', strtotime($request->end))."'" : 'TRUE';
+        $where = $request->start_date && $request->end_date ? "receipts.date BETWEEN '".$request->start_date."' AND '".$request->end_date."'" : 'TRUE';
         $where = $request->business_id > 0 ? $where." AND business.id = ".$request->business_id : $where;
         
         $records = Receipt::select('receipts.*')
@@ -178,7 +178,7 @@ class ReceiptsController extends Controller
                     ->with('driver')
                     ->orderBy('date','DESC')
                     ->get();
-
+        
         $tabla = Datatables::of( $records )
                 ->addColumn('status', function($registro){
                     $status = '<span class="badge badge-primary">Pendiente</span>';

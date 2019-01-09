@@ -101,8 +101,8 @@
         ajax: {
             url: '{!! route('reports.receipts') !!}',
             data: function(params) {
-                params.start = $('#start').val();
-                params.end = $('#end').val();
+                params.start_date = $('#start').val();
+                params.end_date = $('#end').val();
                 params.business_id = $('#business_id').val();
                 console.log(params);
             }
@@ -117,8 +117,8 @@
             }
         ],
         columns: [
-            {data: 'driver.business.business_name', name: 'name', orderable: false, searchable: false},
-            {data: 'driver.name', name: 'name', orderable: false, searchable: false},
+            {data: 'driver.business.business_name', name: 'business', orderable: false, searchable: false},
+            {data: 'driver.name', name: 'driver', orderable: false, searchable: false},
             {data: 'number', name: 'number'},
             {data: 'amount', name: 'amount'},
             {data: 'payment', name: 'payment'},
