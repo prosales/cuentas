@@ -59,6 +59,12 @@
 
                         <div class="row mt-5">
                             <div class="col-md-12">
+                                <button type="submit" class="btn btn-success btn-lg">Guardar</button>
+                            </div>
+                        </div>
+
+                        <div class="row mt-5">
+                            <div class="col-md-12">
                                 <table class="table table-hover" id="table-records">
                                 <thead>
                                     <tr>
@@ -76,7 +82,6 @@
                                 </table> 
                             </div>
                         </div>
-
                         <hr/>
                         <div class="row mt-5">
                             <div class="col-md-12">
@@ -85,11 +90,6 @@
                         </div>
                         <hr/>
 
-                        <div class="row mt-5">
-                            <div class="col-md-12">
-                                <button type="submit" class="btn btn-success btn-lg">Guardar</button>
-                            </div>
-                        </div>
                     {{ Form::close() }}
                 </div>
             </div>
