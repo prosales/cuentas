@@ -72,14 +72,25 @@ class ReceiptsController extends Controller
     {
         DB::beginTransaction();
         try {
-            $this->validate($request, [
+            $messages = [
+                'number.unique' => 'El número de recibo ingresado ya existe.'
+            ];
+
+            $validator = Validator::make($request->all(), [
                 'driver_id' => 'required',
                 'number' => 'required|unique:receipts,number',
                 'amount' => 'required',
                 'type' => 'required',
                 'foto' => 'required',
                 'galonaje' => 'required'
-            ]);
+            ], $messages);
+    
+            if ($validator->fails()) {
+                return redirect()->back()
+                            ->withInput()
+                            ->withErrors($validator);
+            }
+    
             
             $request->merge(['user_id' => Auth::user()->id]);
             $request->merge(['date' => Carbon::now()->toDateString()]);

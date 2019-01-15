@@ -63,12 +63,22 @@ class DepositsController extends Controller
     {
         DB::beginTransaction();
         try {
-            $this->validate($request, [
+            $messages = [
+                'number.unique' => 'El número de boleta ingresado ya existe.'
+            ];
+
+            $validator = Validator::make($request->all(), [
                 'business_id' => 'required',
-                'number' => 'required|unique:receipts,number',
+                'number' => 'required|unique:deposits,number',
                 'amount' => 'required',
                 'foto' => 'required'
-            ]);
+            ], $messages);
+    
+            if ($validator->fails()) {
+                return redirect()->back()
+                            ->withInput()
+                            ->withErrors($validator);
+            }
 
             $business = Business::find($request->business_id);
             if($business->balance > 0) {

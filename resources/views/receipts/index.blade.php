@@ -22,7 +22,7 @@
                             <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('number') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" >Número de Recibo</label>
-                                    <input type="text" class="form-control{{ $errors->has('number') ? ' is-invalid' : '' }}" name="number" required>
+                                    <input type="text" class="form-control{{ $errors->has('number') ? ' is-invalid' : '' }}" name="number" value="{{old('number')}}" required>
                                     @if ($errors->has('number'))
                                     <div class="invalid-feedback">{{ $errors->first('number') }}</div>
                                     @endif
@@ -31,7 +31,7 @@
                             <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('plate_number') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" >Número de Placa</label>
-                                    <input type="text" class="form-control{{ $errors->has('plate_number') ? ' is-invalid' : '' }}" name="plate_number" required>
+                                    <input type="text" class="form-control{{ $errors->has('plate_number') ? ' is-invalid' : '' }}" name="plate_number" value="{{old('plate_number')}}" required>
                                     @if ($errors->has('plate_number'))
                                     <div class="invalid-feedback">{{ $errors->first('plate_number') }}</div>
                                     @endif
@@ -40,16 +40,19 @@
                             <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('amount') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" >Monto</label>
-                                    <input type="text" class="form-control{{ $errors->has('amount') ? ' is-invalid' : '' }}" name="amount" required>
+                                    <input type="text" class="form-control{{ $errors->has('amount') ? ' is-invalid' : '' }}" name="amount" value="{{old('amount')}}" required>
                                     @if ($errors->has('amount'))
                                     <div class="invalid-feedback">{{ $errors->first('amount') }}</div>
                                     @endif
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group{{ $errors->has('foto') ? ' has-danger' : '' }}">
                                     <label for="foto">Foto Recibo</label>
-                                    <input type="file" class="form-control-file"  name="foto">
+                                    <input type="file" class="form-control-file{{ $errors->has('foto') ? ' is-invalid' : '' }}"  name="foto" value="{{old('foto')}}" required>
+                                    @if ($errors->has('foto'))
+                                    <div class="invalid-feedback">{{ $errors->first('foto') }}</div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -64,19 +67,16 @@
                             <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('galonaje') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" >Galonaje</label>
-                                    <input type="number" min="0" class="form-control{{ $errors->has('galonaje') ? ' is-invalid' : '' }}" name="galonaje" required>
+                                    <input type="number" min="0" class="form-control{{ $errors->has('galonaje') ? ' is-invalid' : '' }}" name="galonaje" value="{{old('galonaje')}}" required>
                                     @if ($errors->has('galonaje'))
                                     <div class="invalid-feedback">{{ $errors->first('galonaje') }}</div>
                                     @endif
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group{{ $errors->has('observations') ? ' has-danger' : '' }}">
+                                <div class="form-group">
                                     <label class="form-control-label" >Observaciones</label>
-                                    <textarea  class="form-control{{ $errors->has('observations') ? ' is-invalid' : '' }}" name="observations"></textarea>
-                                    @if ($errors->has('observations'))
-                                    <div class="invalid-feedback">{{ $errors->first('observations') }}</div>
-                                    @endif
+                                    <textarea  class="form-control" name="observations"></textarea>
                                 </div>
                             </div>
                             <!-- <div class="col-md-6">

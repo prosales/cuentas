@@ -22,7 +22,7 @@
                             <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('number') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" >Número de Boleta</label>
-                                    <input type="text" class="form-control{{ $errors->has('number') ? ' is-invalid' : '' }}" name="number" required>
+                                    <input type="text" class="form-control{{ $errors->has('number') ? ' is-invalid' : '' }}" name="number" value="{{old('number')}}" required>
                                     @if ($errors->has('number'))
                                     <div class="invalid-feedback">{{ $errors->first('number') }}</div>
                                     @endif
@@ -31,7 +31,7 @@
                             <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('amount') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" >Monto</label>
-                                    <input type="text" class="form-control{{ $errors->has('amount') ? ' is-invalid' : '' }}" name="amount" required>
+                                    <input type="text" class="form-control{{ $errors->has('amount') ? ' is-invalid' : '' }}" name="amount" value="{{old('amount')}}" required>
                                     @if ($errors->has('amount'))
                                     <div class="invalid-feedback">{{ $errors->first('amount') }}</div>
                                     @endif
@@ -47,9 +47,12 @@
                                 </div>
                             </div> -->
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group{{ $errors->has('foto') ? ' has-danger' : '' }}">
                                     <label for="excel">Foto Boleta</label>
-                                    <input type="file" class="form-control-file"  name="foto" aria-describedby="excel">
+                                    <input type="file" class="form-control-file{{ $errors->has('foto') ? ' is-invalid' : '' }}"  name="foto" required>
+                                    @if ($errors->has('foto'))
+                                    <div class="invalid-feedback">{{ $errors->first('foto') }}</div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -126,6 +129,8 @@
             dataType: 'JSON',
             success: function(data) {
                 table = $('#table-records > tbody');
+                table.empty();
+                $('#total').text('Q 0');
                 $.each(data, function(key, value) {
                     table.append(
                         '<tr>' +
@@ -147,21 +152,42 @@
             }
         });
     }
-    // var table = $('#table-records').DataTable({
-    //     language: {
-    //         url: "lang/datatables-spanish.json"
-    //     },
-    //     processing: true,
-    //     serverSide: true,
-    //     ajax: '{!! route('drivers.data') !!}',
-    //     columns: [
-    //         {data: 'id', name: 'id'},
-    //         {data: 'name', name: 'name'},
-    //         {data: 'plate_number', name: 'plate_number'},
-    //         {data: 'action', name: 'action', orderable: false, searchable: false}
-    //     ],
-    //     order: [[0, 'asc']]
-    // });
+    
+    function validar() {
+        business_id = $('#business_id').val();
+        var total = 0;
+        if(business_id > 0) {
+            $.ajax({
+                type: 'GET',
+                url: '{{url('receipts')}}' + '/' + business_id + '/pending',
+                dataType: 'JSON',
+                success: function(data) {
+                    table = $('#table-records > tbody');
+                    table.empty();
+                    $('#total').text('Q 0');
+                    $.each(data, function(key, value) {
+                        table.append(
+                            '<tr>' +
+                                '<td>'+value.driver.name+'</td>' +
+                                '<td>'+value.plate_number+'</td>' +
+                                '<td>'+value.number+'</td>' +
+                                '<td>'+value.date+'</td>' +
+                                '<td>'+value.amount+'</td>' +
+                                '<td>'+value.payment+'</td>' +
+                            '<tr/>'
+                        );
+                        total += value.payment;
+                        $('#total').text('Q '+total);
+                    });
+                },
+                error: function() {
+
+                }
+            });
+        }
+    }
+    validar();
+
 </script>
 @endpush
 @endsection
