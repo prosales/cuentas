@@ -119,6 +119,7 @@
                         REPORTE GALONAJES
                         </a>
                     </li>
+                    @if(Auth::user()->es_admin == 1)
                     <br/>
                     <br/>
                     <li class="nav-item" id="banks">
@@ -141,6 +142,7 @@
                         INGRESOS
                         </a>
                     </li>
+                    @endif
                     </ul>
                 </div>
             </nav>
