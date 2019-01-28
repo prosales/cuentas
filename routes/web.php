@@ -60,3 +60,27 @@ Route::get('reports.galonajes', [
     'as' => 'reports.galonajes',
 ]);
 Route::get('report/galonajes', 'ReceiptsController@report_galonaje')->name('galonajes.report');
+//BANKS
+Route::resource('banks', 'BanksController');
+Route::get('banks.data', [
+    'uses' => 'BanksController@data',
+    'as' => 'banks.data',
+]);
+//PROJECTS
+Route::resource('projects', 'ProjectsController');
+Route::get('projects.data', [
+    'uses' => 'ProjectsController@data',
+    'as' => 'projects.data',
+]);
+//EXPENSES
+Route::resource('expenses', 'ExpensesController');
+Route::get('expenses.data', [
+    'uses' => 'ExpensesController@data',
+    'as' => 'expenses.data',
+]);
+//INCOMES
+Route::resource('incomes', 'IncomesController');
+Route::get('incomes.data', [
+    'uses' => 'IncomesController@data',
+    'as' => 'incomes.data',
+]);

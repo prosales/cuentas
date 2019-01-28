@@ -119,6 +119,28 @@
                         REPORTE GALONAJES
                         </a>
                     </li>
+                    <br/>
+                    <br/>
+                    <li class="nav-item" id="banks">
+                        <a class="nav-link" href="{{ route('banks.index') }}">
+                        BANCOS
+                        </a>
+                    </li>
+                    <li class="nav-item" id="projects">
+                        <a class="nav-link" href="{{ route('projects.index') }}">
+                        PROYECTOS
+                        </a>
+                    </li>
+                    <li class="nav-item" id="expenses">
+                        <a class="nav-link" href="{{ route('expenses.index') }}">
+                        GASTOS
+                        </a>
+                    </li>
+                    <li class="nav-item" id="incomes">
+                        <a class="nav-link" href="{{ route('incomes.index') }}">
+                        INGRESOS
+                        </a>
+                    </li>
                     </ul>
                 </div>
             </nav>

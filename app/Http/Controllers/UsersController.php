@@ -116,7 +116,7 @@ class UsersController extends Controller
             $data = $request->except(['password']);
         }
         $registro = User::find($id);
-        $registro->update($data);
+        $registro->update($data->all());
         $registro->save();
 
         return redirect()->route('users.index')->with('success', 'Registro actualizado correctamente');
