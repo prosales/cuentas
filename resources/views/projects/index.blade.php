@@ -37,10 +37,12 @@
                                     <th>#</th>
                                     <th>No. NOG</th>
                                     <th>Nombre</th>
-                                    <th>Monto</th>
+                                    <th>Monto Total</th>
+                                    <th>Pendiente Total</th>
                                     <th>Municipalidad</th>
                                     <th>Lugar</th>
-                                    <th>Pendiente</th>
+                                    <th>Gastos</th>
+                                    <th>Restante</th>
                                     <th>Porcentaje</th>
                                     <th>Acciones</th>
                                 </tr>
@@ -94,9 +96,11 @@
             {data: 'number_nog', name: 'number_nog'},
             {data: 'name', name: 'name'},
             {data: 'amount', name: 'amount'},
+            {data: 'pending', name: 'pending', orderable: false, searchable: false},
             {data: 'municipality', name: 'municipality'},
             {data: 'place', name: 'place'},
-            {data: 'pending', name: 'pending'},
+            {data: 'expenses', name: 'expenses', orderable: false, searchable: false},
+            {data: 'remaining', name: 'remaining', orderable: false, searchable: false},
             {data: 'percentage', name: 'percentage'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
         ],

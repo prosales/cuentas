@@ -144,14 +144,15 @@ class BusinessController extends Controller
         $records = Business::all();
 
         $tabla = Datatables::of( $records )
-                // ->addColumn('balance', function($registro){
-                //     return $registro->monto - $registro->pagado;
-                // })
+                ->addColumn('balance', function($registro){
+                    return '<b style="color: red;">Q '.number_format($registro->balance,0,'.',',').'</b>';
+                })
                 ->addColumn('action', function($registro){
                     $edit = '<a href="'.route('business.edit',$registro->id).'" class="btn btn-primary btn-sm" data-title="Editar">Editar</a> ';
                     $show = '<a href="'.route('business.show',$registro->id).'" class="btn btn-danger btn-sm" data-title="Eliminar">Eliminar</a>';
                     return $edit . $show;
                 })
+                ->rawColumns(['balance', 'action'])
                 ->addIndexColumn()
                 ->make(true);
 

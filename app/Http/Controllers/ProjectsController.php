@@ -148,11 +148,23 @@ class ProjectsController extends Controller
 
     public function data()
     {
-        $records = Project::all();
+        $records = Project::select(
+            'projects.*',
+            \DB::raw('(SELECT SUM(amount) FROM expenses WHERE expenses.project_id = projects.id) as expenses')
+        );
 
         $tabla = Datatables::of( $records )
+                ->addColumn('amount', function($registro){
+                    return 'Q '.number_format($registro->amount,0,'.',',');
+                })
                 ->addColumn('pending', function($registro){
-                    return $registro->amount - $registro->balance;
+                    return 'Q '.number_format(($registro->amount - $registro->balance),0,'.',',');
+                })
+                ->addColumn('expenses', function($registro){
+                    return 'Q '.number_format($registro->expenses,0,'.',',');
+                })
+                ->addColumn('remaining', function($registro){
+                    return '<b style="color: red;">Q '.number_format(($registro->expenses - $registro->balance),0,'.',',').'</b>';
                 })
                 ->addColumn('percentage', function($registro){
                     return $registro->percentage." %";
@@ -163,6 +175,7 @@ class ProjectsController extends Controller
                     return $edit . $show;
                 })
                 ->addIndexColumn()
+                ->rawColumns(['remaining', 'action'])
                 ->make(true);
 
         return $tabla;
