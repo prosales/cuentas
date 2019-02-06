@@ -100,7 +100,7 @@ class DepositsController extends Controller
                         ->leftJoin('business', 'business.id', '=', 'drivers.business_id')
                         ->where('receipts.to_cancel', 0)
                         ->where('business.id', $request->business_id)
-                        ->orderBy('receipts.date', 'desc')
+                        ->orderBy('receipts.date', 'asc')
                         ->get();
                 
                 $amount = floatval($request->amount);
@@ -131,6 +131,7 @@ class DepositsController extends Controller
                                 'deposit_id' => $registro->id,
                                 'payment' => $amount
                             ]);
+                            $amount = 0;
                         }
                     }
                 }
@@ -146,6 +147,72 @@ class DepositsController extends Controller
         catch(\Exception $e) {
             DB::rollBack();
             return redirect()->route('deposits.index')->with('error', 'Ocurrio un problema al crear el depósito');
+        }
+    }
+
+    public function barrido()
+    {
+        DB::beginTransaction();
+        try {
+            $registros = Deposit::all();
+
+            foreach($registros as $registro) {
+                //dd($registro); //Obtengo el registro del deposito
+                $business = Business::find($registro->business_id);
+                $business->balance -= $registro->amount;
+                $business->save();
+
+                $receipts = Receipt::select('receipts.*')
+                        ->leftJoin('drivers', 'drivers.id', '=', 'receipts.driver_id')
+                        ->leftJoin('business', 'business.id', '=', 'drivers.business_id')
+                        ->where('receipts.to_cancel', 0)
+                        ->where('business.id', $registro->business_id)
+                        ->orderBy('receipts.date', 'asc')
+                        ->get();
+
+                //dd($receipts); //Obtengo los recibos
+                
+                $amount = floatval($registro->amount);
+                //dd($amount);
+                foreach($receipts as $item) {
+                    if($amount == 0) {
+                        break;
+                    }
+                    else {
+                        if($item->payment <= $amount) {
+                            $amount -= $item->payment;
+                            $item->payment = 0;
+                            $item->to_cancel = 1;
+                            $item->save();
+
+                            Payment::create([
+                                'receipt_id' => $item->id,
+                                'deposit_id' => $registro->id,
+                                'payment' => $item->amount
+                            ]);
+                        }
+                        else {
+                            $payment = $item->payment - $amount;
+                            $item->payment = $payment;
+                            $item->save();
+
+                            Payment::create([
+                                'receipt_id' => $item->id,
+                                'deposit_id' => $registro->id,
+                                'payment' => $amount
+                            ]);
+                            $amount = 0;
+                        }
+                    }
+                }
+            }
+
+            DB::commit();
+            return 'Barrido completo';
+        }
+        catch(\Exception $e) {
+            DB::rollBack();
+            return $e->getMessage();
         }
     }
 

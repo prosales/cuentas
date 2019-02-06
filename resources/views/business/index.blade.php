@@ -1,6 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+.dt-buttons {
+    margin-bottom: 25px !important;
+}
+.buttons-excel{
+    border-style: solid;
+    border-width: 0 1px 4px 1px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+    background-color: #219724;
+    border-color: #1f8c22;
+    cursor: pointer;
+}
+</style>
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 color">
     <div class="row mt-5">
         <div class="col-md-12">
@@ -60,6 +76,15 @@
         processing: true,
         serverSide: true,
         ajax: '{!! route('business.data') !!}',
+        dom: 'Blfrtip',
+        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
+        buttons: [
+            {
+                extend: 'excel',
+                text: 'Exportar Excel',
+                title: 'Reporte Empresas'
+            }
+        ],
         columns: [
             {data: 'id', name: 'id'},
             {data: 'owner_name', name: 'owner_name'},

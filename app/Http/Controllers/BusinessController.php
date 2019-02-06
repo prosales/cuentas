@@ -127,25 +127,26 @@ class BusinessController extends Controller
 
     public function data()
     {
-        $records = Business::select(
-            'business.*',
-            \DB::raw('
-            (
-                SELECT SUM(receipts.amount) FROM receipts
-                INNER JOIN drivers ON drivers.id = receipts.driver_id
-                WHERE drivers.business_id = business.id
-            ) as monto,
-            (
-                SELECT SUM(deposits.amount) FROM deposits
-                WHERE deposits.business_id = business.id
-            ) as pagado
-            ')
-        );
+        // $records = Business::select(
+        //     'business.*',
+        //     \DB::raw('
+        //     (
+        //         SELECT SUM(receipts.amount) FROM receipts
+        //         INNER JOIN drivers ON drivers.id = receipts.driver_id
+        //         WHERE drivers.business_id = business.id
+        //     ) as monto,
+        //     (
+        //         SELECT SUM(deposits.amount) FROM deposits
+        //         WHERE deposits.business_id = business.id
+        //     ) as pagado
+        //     ')
+        // );
+        $records = Business::all();
 
         $tabla = Datatables::of( $records )
-                ->addColumn('balance', function($registro){
-                    return $registro->monto - $registro->pagado;
-                })
+                // ->addColumn('balance', function($registro){
+                //     return $registro->monto - $registro->pagado;
+                // })
                 ->addColumn('action', function($registro){
                     $edit = '<a href="'.route('business.edit',$registro->id).'" class="btn btn-primary btn-sm" data-title="Editar">Editar</a> ';
                     $show = '<a href="'.route('business.show',$registro->id).'" class="btn btn-danger btn-sm" data-title="Eliminar">Eliminar</a>';
