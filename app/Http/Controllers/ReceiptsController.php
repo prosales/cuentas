@@ -191,6 +191,14 @@ class ReceiptsController extends Controller
                     ->get();
         
         $tabla = Datatables::of( $records )
+                ->addColumn('amount', function($registro){
+                    
+                    return 'Q '.number_format($registro->amount,0,'.',',');
+                })
+                ->addColumn('payment', function($registro){
+                    
+                    return 'Q '.number_format($registro->payment,0,'.',',');
+                })
                 ->addColumn('status', function($registro){
                     $status = '<span class="badge badge-primary">Pendiente</span>';
                     if($registro->to_cancel == 1) {
@@ -209,7 +217,7 @@ class ReceiptsController extends Controller
 
                     return $photo;
                 })
-                ->rawColumns(['status','photo'])
+                ->rawColumns(['amount','payment','status','photo'])
                 ->addIndexColumn()
                 ->make(true);
 

@@ -281,6 +281,10 @@ class DepositsController extends Controller
         $records = Deposit::whereRaw($where)->with('business')->orderBy('date','DESC')->get();
 
         $tabla = Datatables::of( $records )
+                ->addColumn('amount', function($registro){
+                            
+                    return 'Q '.number_format($registro->amount,0,'.',',');
+                })
                 ->addColumn('photo', function($registro){
                     $photo = '';
                     if($registro->photo!='')

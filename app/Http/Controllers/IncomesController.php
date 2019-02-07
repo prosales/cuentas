@@ -153,6 +153,15 @@ class IncomesController extends Controller
         $records = Income::with('project', 'bank')->whereRaw($where)->get();
         
         $tabla = Datatables::of( $records )
+                ->addColumn('check_amount', function($registro){
+                            
+                    return 'Q '.number_format($registro->check_amount,0,'.',',');
+                })
+                ->addColumn('invoice_amount', function($registro){
+                            
+                    return 'Q '.number_format($registro->invoice_amount,0,'.',',');
+                })
+                ->rawColumns(['check_amount','invoice_amount'])
                 ->addIndexColumn()
                 ->make(true);
 

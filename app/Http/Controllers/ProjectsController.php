@@ -164,7 +164,7 @@ class ProjectsController extends Controller
                     return 'Q '.number_format($registro->expenses,0,'.',',');
                 })
                 ->addColumn('remaining', function($registro){
-                    return '<b style="color: red;">Q '.number_format(($registro->expenses - $registro->balance),0,'.',',').'</b>';
+                    return '<b style="color: red;">Q '.number_format(($registro->balance - $registro->expenses),0,'.',',').'</b>';
                 })
                 ->addColumn('percentage', function($registro){
                     return $registro->percentage." %";
