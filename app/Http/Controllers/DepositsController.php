@@ -224,7 +224,9 @@ class DepositsController extends Controller
      */
     public function show($id)
     {
-        
+        $registro = Deposit::find($id);
+
+        return view('deposits.show', compact('registro'));
     }
 
     /**
@@ -258,7 +260,16 @@ class DepositsController extends Controller
      */
     public function destroy($id)
     {
-        
+        $registro = Deposit::find($id);
+        $business = Business::find($registro->business_id);
+        $business->balance = floatval($business->balance) + floatval($registro->amount);
+        $business->save();
+
+        if ($registro->delete()) {
+            return redirect()->route('deposits.report')->with('success', 'Registro eliminado correctamente');
+        } else {
+            return redirect()->route('deposits.report')->with('error', 'Registro no se pudo eliminar');
+        }
     }
 
     public function report()
@@ -283,7 +294,7 @@ class DepositsController extends Controller
         $tabla = Datatables::of( $records )
                 ->addColumn('amount', function($registro){
                             
-                    return 'Q '.number_format($registro->amount,0,'.',',');
+                    return 'Q '.number_format($registro->amount,2,'.',',');
                 })
                 ->addColumn('photo', function($registro){
                     $photo = '';
@@ -292,7 +303,12 @@ class DepositsController extends Controller
 
                     return $photo;
                 })
-                ->rawColumns(['photo'])
+                ->addColumn('action', function($registro){
+     
+                    $show = '<a href="'.route('deposits.show',$registro->id).'" class="btn btn-danger btn-sm" data-title="Eliminar"><i class="fa fa-trash"></i></a>';
+                    return $show;
+                })
+                ->rawColumns(['photo','action'])
                 ->addIndexColumn()
                 ->make(true);
 

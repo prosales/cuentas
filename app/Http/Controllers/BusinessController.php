@@ -26,7 +26,10 @@ class BusinessController extends Controller
      */
     public function index()
     {
-        return view('business.index');
+        $total = Business::sum('balance');
+        $total = number_format($total,2,'.',',');
+
+        return view('business.index', compact('total'));
     }
 
     /**
@@ -52,6 +55,10 @@ class BusinessController extends Controller
         $this->validate($request, [
             'owner_name' => 'required|max:255',
             'business_name' => 'required|max:255',
+            'nit' => 'required',
+            'address' => 'required',
+            'phone' => 'required',
+            'email' => 'required',
             'gas_station_id' => 'required'
         ]);
 
@@ -100,6 +107,10 @@ class BusinessController extends Controller
         $this->validate($request, [
             'owner_name' => 'required|max:255',
             'business_name' => 'required|max:255',
+            'nit' => 'required',
+            'address' => 'required',
+            'phone' => 'required',
+            'email' => 'required',
             'gas_station_id' => 'required'
         ]);
         
@@ -145,11 +156,11 @@ class BusinessController extends Controller
 
         $tabla = Datatables::of( $records )
                 ->addColumn('balance', function($registro){
-                    return '<b style="color: red;">Q '.number_format($registro->balance,0,'.',',').'</b>';
+                    return '<b style="color: red;">Q '.number_format($registro->balance,2,'.',',').'</b>';
                 })
                 ->addColumn('action', function($registro){
-                    $edit = '<a href="'.route('business.edit',$registro->id).'" class="btn btn-primary btn-sm" data-title="Editar">Editar</a> ';
-                    $show = '<a href="'.route('business.show',$registro->id).'" class="btn btn-danger btn-sm" data-title="Eliminar">Eliminar</a>';
+                    $edit = '<a href="'.route('business.edit',$registro->id).'" class="btn btn-primary btn-sm" data-title="Editar"><i class="fa fa-edit"></i></a> ';
+                    $show = '<a href="'.route('business.show',$registro->id).'" class="btn btn-danger btn-sm" data-title="Eliminar"><i class="fa fa-trash"></i></a>';
                     return $edit . $show;
                 })
                 ->rawColumns(['balance', 'action'])

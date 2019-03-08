@@ -151,8 +151,8 @@ class UsersController extends Controller
                     return $gas_station;
                 })
                 ->addColumn('action', function($registro){
-                    $edit = '<a href="'.route('users.edit',$registro->id).'" class="btn btn-primary btn-sm" data-title="Editar">Editar</a> ';
-                    $show = '<a href="'.route('users.show',$registro->id).'" class="btn btn-danger btn-sm" data-title="Eliminar">Eliminar</a>';
+                    $edit = '<a href="'.route('users.edit',$registro->id).'" class="btn btn-primary btn-sm" data-title="Editar"><i class="fa fa-edit"></i></a> ';
+                    $show = '<a href="'.route('users.show',$registro->id).'" class="btn btn-danger btn-sm" data-title="Eliminar"><i class="fa fa-trash"></i></a>';
                     return $edit . $show;
                 })
                 ->addIndexColumn()

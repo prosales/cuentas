@@ -94,7 +94,9 @@ class ExpensesController extends Controller
      */
     public function show($id)
     {
-        
+        $registro = Expense::find($id);
+
+        return view('expenses.show', compact('registro'));
     }
 
     /**
@@ -128,7 +130,12 @@ class ExpensesController extends Controller
      */
     public function destroy($id)
     {
-        
+        $registro = Expense::find($id);
+        if ($registro->delete()) {
+            return redirect()->route('expenses.index')->with('success', 'Registro eliminado correctamente');
+        } else {
+            return redirect()->route('expenses.index')->with('error', 'Registro no se pudo eliminar');
+        }
     }
 
     public function data(Request $request)
@@ -138,7 +145,7 @@ class ExpensesController extends Controller
         $tabla = Datatables::of( $records )
                 ->addColumn('amount', function($registro){
                             
-                    return 'Q '.number_format($registro->amount,0,'.',',');
+                    return 'Q '.number_format($registro->amount,2,'.',',');
                 })
                 ->addColumn('photo', function($registro){
                     $photo = '';
@@ -147,7 +154,12 @@ class ExpensesController extends Controller
 
                     return $photo;
                 })
-                ->rawColumns(['photo'])
+                ->addColumn('action', function($registro){
+                    
+                    $show = '<a href="'.route('expenses.show',$registro->id).'" class="btn btn-danger btn-sm" data-title="Eliminar"><i class="fa fa-trash"></i></a>';
+                    return $show;
+                })
+                ->rawColumns(['photo','action'])
                 ->addIndexColumn()
                 ->make(true);
 

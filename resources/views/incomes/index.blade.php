@@ -73,6 +73,7 @@
                                     <th>Fecha</th>
                                     <th>No. Factura</th>
                                     <th>Monto Factura</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -135,7 +136,8 @@
             {data: 'check_amount', name: 'check_amout'},
             {data: 'date', name: 'date'},
             {data: 'invoice', name: 'invoice'},
-            {data: 'invoice_amount', name: 'invoice_amount'}
+            {data: 'invoice_amount', name: 'invoice_amount'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
         ],
         order: [[0, 'asc']]
     });

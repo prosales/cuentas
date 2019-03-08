@@ -128,7 +128,9 @@ class ReceiptsController extends Controller
      */
     public function show($id)
     {
-        
+        $registro = Receipt::find($id);
+
+        return view('receipts.show', compact('registro'));
     }
 
     /**
@@ -162,7 +164,17 @@ class ReceiptsController extends Controller
      */
     public function destroy($id)
     {
-        
+        $registro = Receipt::find($id);
+        $driver = Driver::find($registro->driver_id);
+        $business = Business::find($driver->business_id);
+        $business->balance = floatval($business->balance) - floatval($registro->amount);
+        $business->save();
+
+        if ($registro->delete()) {
+            return redirect()->route('receipts.report')->with('success', 'Registro eliminado correctamente');
+        } else {
+            return redirect()->route('receipts.report')->with('error', 'Registro no se pudo eliminar');
+        }
     }
 
     public function report()
@@ -193,11 +205,11 @@ class ReceiptsController extends Controller
         $tabla = Datatables::of( $records )
                 ->addColumn('amount', function($registro){
                     
-                    return 'Q '.number_format($registro->amount,0,'.',',');
+                    return 'Q '.number_format($registro->amount,2,'.',',');
                 })
                 ->addColumn('payment', function($registro){
                     
-                    return 'Q '.number_format($registro->payment,0,'.',',');
+                    return 'Q '.number_format($registro->payment,2,'.',',');
                 })
                 ->addColumn('status', function($registro){
                     $status = '<span class="badge badge-primary">Pendiente</span>';
@@ -217,7 +229,19 @@ class ReceiptsController extends Controller
 
                     return $photo;
                 })
-                ->rawColumns(['amount','payment','status','photo'])
+                ->addColumn('action', function($registro){
+                    if($registro->to_cancel == 1) {
+                        $show = '';
+                    }
+                    else if($registro->payment != $registro->amount) {
+                        $show = '';
+                    }
+                    else {
+                        $show = '<a href="'.route('receipts.show',$registro->id).'" class="btn btn-danger btn-sm" data-title="Eliminar"><i class="fa fa-trash"></i></a>';
+                    }
+                    return $show;
+                })
+                ->rawColumns(['amount','payment','status','photo','action'])
                 ->addIndexColumn()
                 ->make(true);
 

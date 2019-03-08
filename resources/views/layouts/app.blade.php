@@ -15,6 +15,7 @@
     <link href="{{ asset('bower_components/bootswatch/dist/lumen/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('bower_components/datatables.net-bs4/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
     <link href="{{ asset('bower_components/alertify-js/build/css/alertify.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <style>
     main.color {
         background: #F5F5F5 !important;

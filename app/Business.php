@@ -13,6 +13,6 @@ class Business extends Model
      * @var array
      */
     protected $fillable = [
-        'owner_name', 'business_name', 'balance', 'gas_station_id'
+        'owner_name', 'business_name', 'nit', 'address', 'phone', 'email', 'balance', 'gas_station_id'
     ];
 }

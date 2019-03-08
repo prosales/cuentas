@@ -155,23 +155,23 @@ class ProjectsController extends Controller
 
         $tabla = Datatables::of( $records )
                 ->addColumn('amount', function($registro){
-                    return 'Q '.number_format($registro->amount,0,'.',',');
+                    return 'Q '.number_format($registro->amount,2,'.',',');
                 })
                 ->addColumn('pending', function($registro){
-                    return 'Q '.number_format(($registro->amount - $registro->balance),0,'.',',');
+                    return 'Q '.number_format(($registro->amount - $registro->balance),2,'.',',');
                 })
                 ->addColumn('expenses', function($registro){
-                    return 'Q '.number_format($registro->expenses,0,'.',',');
+                    return 'Q '.number_format($registro->expenses,2,'.',',');
                 })
                 ->addColumn('remaining', function($registro){
-                    return '<b style="color: red;">Q '.number_format(($registro->balance - $registro->expenses),0,'.',',').'</b>';
+                    return '<b style="color: red;">Q '.number_format(($registro->balance - $registro->expenses),2,'.',',').'</b>';
                 })
                 ->addColumn('percentage', function($registro){
                     return $registro->percentage." %";
                 })
                 ->addColumn('action', function($registro){
-                    $edit = '<a href="'.route('projects.edit',$registro->id).'" class="btn btn-primary btn-sm" data-title="Editar">Editar</a> ';
-                    $show = '<a href="'.route('projects.show',$registro->id).'" class="btn btn-danger btn-sm" data-title="Eliminar">Eliminar</a>';
+                    $edit = '<a href="'.route('projects.edit',$registro->id).'" class="btn btn-primary btn-sm" data-title="Editar"><i class="fa fa-edit"></i></a> ';
+                    $show = '<a href="'.route('projects.show',$registro->id).'" class="btn btn-danger btn-sm" data-title="Eliminar"><i class="fa fa-trash"></i></a>';
                     return $edit . $show;
                 })
                 ->addIndexColumn()

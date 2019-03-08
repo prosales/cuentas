@@ -65,6 +65,7 @@
                                     <th>Detalle</th>
                                     <th>Monto</th>
                                     <th>Foto</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -124,7 +125,8 @@
             {data: 'project.name', name: 'name', orderable: false, searchable: false},
             {data: 'detail', name: 'detail'},
             {data: 'amount', name: 'amount'},
-            {data: 'photo', name: 'photo'}
+            {data: 'photo', name: 'photo'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
         ],
         order: [[0, 'asc']]
     });

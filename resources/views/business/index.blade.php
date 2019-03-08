@@ -25,8 +25,13 @@
 
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <a href="{{ route('business.create') }}" class="btn btn-primary btn-sm">Crear Registro</a>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="alert alert-dismissible alert-warning">
+                                <h4 class="alert-heading">TOTAL: Q {{$total}}</h4>
+                            </div>
                         </div>
                     </div>
                     <div class="row mt-5">

@@ -107,7 +107,9 @@ class IncomesController extends Controller
      */
     public function show($id)
     {
-        
+        $registro = Income::find($id);
+
+        return view('incomes.show', compact('registro'));
     }
 
     /**
@@ -141,7 +143,18 @@ class IncomesController extends Controller
      */
     public function destroy($id)
     {
-        
+        $registro = Income::find($id);
+        $project = Project::find($registro->project_id);
+        $project->balance = floatval($project->balance) - floatval($registro->check_amount);
+        $percentage = (100 * $project->balance) / $project->amount;
+        $project->percentage = round($percentage, 2);
+        $project->save();
+
+        if ($registro->delete()) {
+            return redirect()->route('incomes.index')->with('success', 'Registro eliminado correctamente');
+        } else {
+            return redirect()->route('incomes.index')->with('error', 'Registro no se pudo eliminar');
+        }
     }
 
     public function data(Request $request)
@@ -155,13 +168,18 @@ class IncomesController extends Controller
         $tabla = Datatables::of( $records )
                 ->addColumn('check_amount', function($registro){
                             
-                    return 'Q '.number_format($registro->check_amount,0,'.',',');
+                    return 'Q '.number_format($registro->check_amount,2,'.',',');
                 })
                 ->addColumn('invoice_amount', function($registro){
                             
-                    return 'Q '.number_format($registro->invoice_amount,0,'.',',');
+                    return 'Q '.number_format($registro->invoice_amount,2,'.',',');
                 })
-                ->rawColumns(['check_amount','invoice_amount'])
+                ->addColumn('action', function($registro){
+                    
+                    $show = '<a href="'.route('incomes.show',$registro->id).'" class="btn btn-danger btn-sm" data-title="Eliminar"><i class="fa fa-trash"></i></a>';
+                    return $show;
+                })
+                ->rawColumns(['check_amount','invoice_amount','action'])
                 ->addIndexColumn()
                 ->make(true);
 

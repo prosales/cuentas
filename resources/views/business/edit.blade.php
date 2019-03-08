@@ -29,6 +29,42 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
+                                <div class="form-group{{ $errors->has('nit') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" >NIT</label>
+                                    <input type="text" class="form-control{{ $errors->has('nit') ? ' is-invalid' : '' }}" name="nit" value="{{ $registro->nit }}" required>
+                                    @if ($errors->has('nit'))
+                                    <div class="invalid-feedback">{{ $errors->first('nit') }}</div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group{{ $errors->has('address') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" >Dirección</label>
+                                    <input type="text" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" name="address" value="{{ $registro->address }}" required>
+                                    @if ($errors->has('address'))
+                                    <div class="invalid-feedback">{{ $errors->first('address') }}</div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group{{ $errors->has('phone') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" >Teléfono</label>
+                                    <input type="text" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" name="phone" value="{{ $registro->phone }}" required>
+                                    @if ($errors->has('phone'))
+                                    <div class="invalid-feedback">{{ $errors->first('phone') }}</div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" >Correo electrónico</label>
+                                    <input type="text" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ $registro->email }}" required>
+                                    @if ($errors->has('email'))
+                                    <div class="invalid-feedback">{{ $errors->first('email') }}</div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('gas_station_id') ? ' has-danger' : '' }}">
                                     <label for="exampleSelect1">Gasolinera</label>
                                     {{ Form::select('gas_station_id', $stations, $registro->gas_station_id, ['class'=>'form-control', 'id'=>'gas_station_id']) }}

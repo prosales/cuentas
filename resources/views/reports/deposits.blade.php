@@ -59,6 +59,7 @@
                                     <th>Monto</th>
                                     <th>Fecha</th>
                                     <th>Url Foto</th>
+                                    <th class="noexport">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -117,7 +118,8 @@
             {data: 'number', name: 'number'},
             {data: 'amount', name: 'amount'},
             {data: 'date', name: 'date'},
-            {data: 'photo', name: 'photo'}
+            {data: 'photo', name: 'photo'},
+            {data: 'action', name: 'action', orderable: false, searchable: false}
         ],
         order: [[0, 'asc']]
     });
