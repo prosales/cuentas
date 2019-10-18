@@ -149,8 +149,14 @@ class DriversController extends Controller
                     return $business;
                 })
                 ->addColumn('action', function($registro){
-                    $edit = '<a href="'.route('drivers.edit', $registro->id).'" class="btn btn-primary btn-sm" data-title="Editar"><i class="fa fa-edit"></i></a> ';
-                    $show = '<a href="'.route('drivers.show', $registro->id).'" class="btn btn-danger btn-sm" data-title="Eliminar"><i class="fa fa-trash"></i></a> ';
+                    if(\Auth::user()->es_admin == 1) {
+                        $edit = '<a href="'.route('drivers.edit', $registro->id).'" class="btn btn-primary btn-sm" data-title="Editar"><i class="fa fa-edit"></i></a> ';
+                        $show = '<a href="'.route('drivers.show', $registro->id).'" class="btn btn-danger btn-sm" data-title="Eliminar"><i class="fa fa-trash"></i></a> ';
+                    }
+                    else {
+                        $edit = '';
+                        $show = '';
+                    }
                     $receipt = '<a href="'.route('receipts.createreceipt', $registro->id).'" class="btn btn-success btn-sm" data-title="Crear Recibo"><i class="fa fa-check"></i></a>';
                     return $edit . $show . $receipt;
                 })
