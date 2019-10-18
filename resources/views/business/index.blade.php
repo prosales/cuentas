@@ -21,7 +21,7 @@
     <div class="row mt-5">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Empresas</div>
+                <div class="card-header">Clientes</div>
 
                 <div class="card-body">
                     <div class="row">

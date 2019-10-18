@@ -5,7 +5,7 @@
     <div class="row mt-5">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Eliminar Chofer</div>
+                <div class="card-header">Eliminar Cliente</div>
 
                 <div class="card-body">
                     {{ Form::open(['method' => 'DELETE','route' => ['business.destroy', $registro->id]]) }}

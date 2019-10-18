@@ -5,7 +5,7 @@
     <div class="row mt-5">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Editar Empresa</div>
+                <div class="card-header">Editar Cliente</div>
 
                 <div class="card-body">
                     {{ Form::open(['method' => 'PUT','route' => ['business.update', $registro->id]]) }}
