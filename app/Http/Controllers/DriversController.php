@@ -138,6 +138,7 @@ class DriversController extends Controller
             $records = Driver::select(DB::raw('drivers.*'))
             ->leftJoin('business', 'business.id', '=', 'drivers.business_id')
             ->whereRaw('business.gas_station_id = ?', [\Auth::user()->gas_station_id])
+            ->orderBy('drivers.name')
             ->with('business')
             ->get();
         }
@@ -148,9 +149,10 @@ class DriversController extends Controller
                     return $business;
                 })
                 ->addColumn('action', function($registro){
-                    $edit = '<a href="'.route('drivers.edit',$registro->id).'" class="btn btn-primary btn-sm" data-title="Editar"><i class="fa fa-edit"></i></a> ';
-                    $show = '<a href="'.route('drivers.show',$registro->id).'" class="btn btn-danger btn-sm" data-title="Eliminar"><i class="fa fa-trash"></i></a>';
-                    return $edit . $show;
+                    $edit = '<a href="'.route('drivers.edit', $registro->id).'" class="btn btn-primary btn-sm" data-title="Editar"><i class="fa fa-edit"></i></a> ';
+                    $show = '<a href="'.route('drivers.show', $registro->id).'" class="btn btn-danger btn-sm" data-title="Eliminar"><i class="fa fa-trash"></i></a> ';
+                    $receipt = '<a href="'.route('receipts.createreceipt', $registro->id).'" class="btn btn-success btn-sm" data-title="Crear Recibo"><i class="fa fa-check"></i></a>';
+                    return $edit . $show . $receipt;
                 })
                 ->addIndexColumn()
                 ->make(true);

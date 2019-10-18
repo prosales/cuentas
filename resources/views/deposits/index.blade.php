@@ -12,7 +12,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('business_id') ? ' has-danger' : '' }}">
-                                    <label for="exampleSelect1">Empresa</label>
+                                    <label for="exampleSelect1">Cliente</label>
                                     {{ Form::select('business_id', $business, 0, ['class'=>'form-control', 'id'=>'business_id']) }}
                                     @if ($errors->has('business_id'))
                                     <div class="invalid-feedback">{{ $errors->first('business_id') }}</div>
@@ -68,8 +68,7 @@
                                 <table class="table table-hover" id="table-records">
                                 <thead>
                                     <tr>
-                                        <th>Chofer</th>
-                                        <th>Número de placa</th>
+                                        <th>Número de Placa</th>
                                         <th>Número de Recibo</th>
                                         <th>Fecha</th>
                                         <th>Monto</th>
@@ -135,7 +134,6 @@
                     table.append(
                         '<tr>' +
                             '<td>'+value.driver.name+'</td>' +
-                            '<td>'+value.plate_number+'</td>' +
                             '<td>'+value.number+'</td>' +
                             '<td>'+value.date+'</td>' +
                             '<td>'+value.amount+'</td>' +

@@ -5,7 +5,7 @@
     <div class="row mt-5">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Choferes</div>
+                <div class="card-header">Vehículos</div>
 
                 <div class="card-body">
                     <div class="row">
@@ -19,8 +19,8 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Nombre</th>
-                                    <th>Empresa</th>
+                                    <th>No. Placa</th>
+                                    <th>Cliente</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -65,7 +65,7 @@
             {data: 'business', name: 'businesss', orderable: false, searchable: false},
             {data: 'action', name: 'action', orderable: false, searchable: false}
         ],
-        order: [[0, 'asc']]
+        order: [[1, 'asc']]
     });
 </script>
 @endpush

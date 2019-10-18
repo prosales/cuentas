@@ -30,7 +30,7 @@ class ReceiptsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
         if(Auth::user()->es_admin == 1)
             $drivers = Driver::select('name','id')->pluck('name','id');
@@ -40,6 +40,7 @@ class ReceiptsController extends Controller
             ->whereRaw('business.gas_station_id = ?', [Auth::user()->gas_station_id])
             ->pluck('name','id');
         }
+
         $drivers[0] = 'Seleccione';
         $options = [
             '' => 'Seleccione',
@@ -49,7 +50,10 @@ class ReceiptsController extends Controller
             'Diesel' => 'Diesel',
             'Otros' => 'Otros'
         ];
-        return view('receipts.index', compact('drivers', 'options'));
+
+        $driver_id = $id;
+
+        return view('receipts.index', compact('drivers', 'options', 'driver_id'));
     }
 
     /**
@@ -95,6 +99,7 @@ class ReceiptsController extends Controller
             $request->merge(['user_id' => Auth::user()->id]);
             $request->merge(['date' => Carbon::now()->toDateString()]);
             $request->merge(['payment' => $request->amount]);
+            $request->merge(['plate_number' => 'NONE']);
             if($request->observations!='') {
                 $request->merge(['observations' => '']);
             }
@@ -112,11 +117,11 @@ class ReceiptsController extends Controller
             $business->save();
             
             DB::commit();
-            return redirect()->route('receipts.index')->with('success', 'Registro creado correctamente');
+            return redirect()->route('drivers.index')->with('success', 'Registro creado correctamente');
         }
         catch(\Exception $e) {
             DB::rollBack();
-            return redirect()->route('receipts.index')->with('error', 'Ocurrio un problema al registrar el recibo.');
+            return redirect()->route('drivers.index')->with('error', 'Ocurrio un problema al registrar el recibo.');
         }
     }
 

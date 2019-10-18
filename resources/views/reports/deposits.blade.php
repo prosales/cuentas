@@ -39,7 +39,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="form-control-label" >Empresa</label>
+                                <label class="form-control-label" >Cliente</label>
                                 {{ Form::select('business_id', $business, 0, ['class'=>'form-control', 'id'=>'business_id']) }}
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                             <table class="table table-hover" id="table-records">
                             <thead>
                                 <tr>
-                                    <th>Nombre de la empresa</th>
+                                    <th>Nombre del cliente</th>
                                     <th>No. Recibo</th>
                                     <th>Monto</th>
                                     <th>Fecha</th>

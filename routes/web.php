@@ -41,6 +41,7 @@ Route::get('drivers.data', [
     'as' => 'drivers.data',
 ]);
 //RECEIPTS
+Route::get('receipts/{id}/create', 'ReceiptsController@index')->name('receipts.createreceipt');
 Route::resource('receipts', 'ReceiptsController');
 Route::get('reports.receipts', [
     'uses' => 'ReceiptsController@data',

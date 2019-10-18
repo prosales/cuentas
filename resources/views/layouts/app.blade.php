@@ -84,20 +84,20 @@
                     </li>
                     <li class="nav-item" id="business">
                         <a class="nav-link" href="{{ route('business.index') }}">
-                        EMPRESAS
+                        CLIENTES
                         </a>
                     </li>
                     @endif
                     <li class="nav-item" id="drivers">
                         <a class="nav-link" href="{{ route('drivers.index') }}">
-                        CHOFERES
+                        VEHICULOS
                         </a>
                     </li>
-                    <li class="nav-item" id="receipts">
+                    <!-- <li class="nav-item" id="receipts">
                         <a class="nav-link" href="{{ route('receipts.index') }}">
                         RECIBOS / VALES
                         </a>
-                    </li>
+                    </li> -->
                     <li class="nav-item" id="deposits">
                         <a class="nav-link" href="{{ route('deposits.index') }}">
                         DEPOSITOS

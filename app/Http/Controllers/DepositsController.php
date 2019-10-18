@@ -35,9 +35,9 @@ class DepositsController extends Controller
     public function index()
     {
         if(\Auth::user()->es_admin == 1)
-            $business = Business::select(DB::raw('business_name as name'), 'id')->pluck('name','id');
+            $business = Business::select(DB::raw('business_name as name'), 'id')->orderBy('business_name', 'asc')->pluck('name','id');
         else
-            $business = Business::select(DB::raw('business_name as name'), 'id')->where('gas_station_id', \Auth::user()->gas_station_id)->pluck('name','id');
+            $business = Business::select(DB::raw('business_name as name'), 'id')->where('gas_station_id', \Auth::user()->gas_station_id)->orderBy('business_name', 'asc')->pluck('name','id');
 
         $business[0] = 'Seleccione';
         return view('deposits.index', compact('business'));

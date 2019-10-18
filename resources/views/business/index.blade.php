@@ -98,7 +98,7 @@
             {data: 'balance', name: 'balance'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
         ],
-        order: [[0, 'asc']]
+        order: [[1, 'asc']]
     });
 </script>
 @endpush

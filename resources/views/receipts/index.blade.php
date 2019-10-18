@@ -12,8 +12,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('driver_id') ? ' has-danger' : '' }}">
-                                    <label for="exampleSelect1">Chofer</label>
-                                    {{ Form::select('driver_id', $drivers, 0, ['class'=>'form-control', 'id'=>'driver_id', 'required'=>true]) }}
+                                    <label for="exampleSelect1">Vehículo</label>
+                                    {{ Form::select('driver_id', $drivers, $driver_id, ['class'=>'form-control', 'id'=>'driver_id', 'required' => true, 'readonly' => true]) }}
                                     @if ($errors->has('driver_id'))
                                     <div class="invalid-feedback">{{ $errors->first('driver_id') }}</div>
                                     @endif
@@ -28,15 +28,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group{{ $errors->has('plate_number') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" >Número de Placa</label>
-                                    <input type="text" class="form-control{{ $errors->has('plate_number') ? ' is-invalid' : '' }}" name="plate_number" value="{{old('plate_number')}}" required>
-                                    @if ($errors->has('plate_number'))
-                                    <div class="invalid-feedback">{{ $errors->first('plate_number') }}</div>
-                                    @endif
-                                </div>
-                            </div>
+
                             <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('amount') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" >Monto</label>
@@ -76,7 +68,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-control-label" >Observaciones</label>
-                                    <textarea  class="form-control" name="observations"></textarea>
+                                    <textarea  class="form-control" name="observations">{{old('observations')}}</textarea>
                                 </div>
                             </div>
                             <!-- <div class="col-md-6">
@@ -117,7 +109,7 @@
 @endif
 @push('scripts')
 <script>
-    updateMenu('receipts');
+    updateMenu('drivers');
     // var table = $('#table-records').DataTable({
     //     language: {
     //         url: "lang/datatables-spanish.json"

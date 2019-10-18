@@ -5,7 +5,7 @@
     <div class="row mt-5">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Editar Chofer</div>
+                <div class="card-header">Editar Vehículo</div>
 
                 <div class="card-body">
                     {{ Form::open(['method' => 'PUT','route' => ['drivers.update', $registro->id]]) }}
@@ -21,7 +21,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('business_id') ? ' has-danger' : '' }}">
-                                    <label for="exampleSelect1">Empresa</label>
+                                    <label for="exampleSelect1">Cliente</label>
                                     {{ Form::select('business_id', $business, $registro->business_id, ['class'=>'form-control', 'id'=>'business_id']) }}
                                     @if ($errors->has('business_id'))
                                     <div class="invalid-feedback">{{ $errors->first('business_id') }}</div>

@@ -39,7 +39,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="form-control-label" >Empresa</label>
+                                <label class="form-control-label" >Cliente</label>
                                 {{ Form::select('business_id', $business, 0, ['class'=>'form-control', 'id'=>'business_id']) }}
                             </div>
                         </div>
