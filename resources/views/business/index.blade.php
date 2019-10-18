@@ -57,6 +57,7 @@
         </div>
     </div>
 </main>
+
 @if(session('success'))
     @push('scripts')
     <script>
