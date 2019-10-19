@@ -85,7 +85,7 @@ class ReceiptsController extends Controller
                 'number' => 'required|unique:receipts,number',
                 'amount' => 'required',
                 'type' => 'required',
-                'foto' => 'required',
+                //'foto' => 'required',
                 'galonaje' => 'required'
             ], $messages);
     
@@ -105,9 +105,14 @@ class ReceiptsController extends Controller
             }
 
             $imagen = $request->file('foto');
-            $nombre_imagen = time().'_'.str_random(10).'.'.$imagen->getClientOriginalExtension();
-            Storage::disk('photos')->put($nombre_imagen,File::get($imagen), 'public');
-            $request->merge(['photo' => 'photos/'.$nombre_imagen]);
+            if($imagen) {
+                $nombre_imagen = time().'_'.str_random(10).'.'.$imagen->getClientOriginalExtension();
+                Storage::disk('photos')->put($nombre_imagen,File::get($imagen), 'public');
+                $request->merge(['photo' => 'photos/'.$nombre_imagen]);
+            }
+            else {
+                $request->merge(['photo' => '']);
+            }
 
             $registro = Receipt::create($request->all());
 

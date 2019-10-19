@@ -49,7 +49,7 @@
                             <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('foto') ? ' has-danger' : '' }}">
                                     <label for="excel">Foto Boleta</label>
-                                    <input type="file" class="form-control-file{{ $errors->has('foto') ? ' is-invalid' : '' }}"  name="foto" required>
+                                    <input type="file" class="form-control-file{{ $errors->has('foto') ? ' is-invalid' : '' }}"  name="foto">
                                     @if ($errors->has('foto'))
                                     <div class="invalid-feedback">{{ $errors->first('foto') }}</div>
                                     @endif

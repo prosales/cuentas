@@ -71,7 +71,7 @@ class DepositsController extends Controller
                 'business_id' => 'required',
                 'number' => 'required|unique:deposits,number',
                 'amount' => 'required',
-                'foto' => 'required'
+                //'foto' => 'required'
             ], $messages);
     
             if ($validator->fails()) {
@@ -86,9 +86,14 @@ class DepositsController extends Controller
                 $request->merge(['date' => Carbon::now()->toDateString()]);
                 
                 $imagen = $request->file('foto');
-                $nombre_imagen = time().'_'.str_random(10).'.'.$imagen->getClientOriginalExtension();
-                Storage::disk('photos')->put($nombre_imagen,File::get($imagen), 'public');
-                $request->merge(['photo' => 'photos/'.$nombre_imagen]);
+                if($imagen) {
+                    $nombre_imagen = time().'_'.str_random(10).'.'.$imagen->getClientOriginalExtension();
+                    Storage::disk('photos')->put($nombre_imagen,File::get($imagen), 'public');
+                    $request->merge(['photo' => 'photos/'.$nombre_imagen]);
+                }
+                else {
+                    $request->merge(['photo' => '']);
+                }
 
                 $registro = Deposit::create($request->all());
 
